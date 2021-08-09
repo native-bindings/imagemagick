@@ -6,6 +6,12 @@
 yarn add image-m
 ```
 
+### Requirements
+
+- ImageMagick 7
+- C++14
+- CMake >= 3.7
+
 ### Usage
 
 ```ts
@@ -45,4 +51,15 @@ img.read(
 );
 img.resize(new Geometry(256,256,0,0));
 img.write(__dirname + '/icon.png');
+```
+
+### Installing ImageMagick 7 from source
+
+```bash
+wget https://download.imagemagick.org/ImageMagick/download/ImageMagick-7.1.0-4.zip
+unzip ImageMagick-7.1.0-4.zip
+cd ImageMagick-7.1.0-4
+./configure --enable-shared --with-modules --with-gslib
+make
+make install
 ```

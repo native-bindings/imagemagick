@@ -1,11 +1,8 @@
 project(node_imagemagick CXX)
 
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.7)
 
-set(CMAKE_CXX_STANDARD 20)
-
-find_package(PkgConfig)
-pkg_check_modules(IM REQUIRED Magick++)
+set(CMAKE_CXX_STANDARD 14)
 
 if(NOT DEFINED CMAKE_JS_INC)
 set(CMAKE_JS_INC
@@ -13,6 +10,11 @@ set(CMAKE_JS_INC
     ${NODE_INSTALL_DIR}/include/node
 )
 endif()
+
+find_package(PkgConfig)
+pkg_check_modules(ImageMagick REQUIRED Magick++ MagickCore)
+
+set(IMAGEMAGICK_COMPILE_OPTIONS ${IMAGEMAGICK_COMPILE_OPTIONS} ${ImageMagick_CFLAGS_OTHER})
 
 add_library(
     imagemagick SHARED
@@ -26,18 +28,18 @@ add_library(
     src/TypeConverter.h
     src/Point.cpp
     src/Point.h src/Color.cpp src/Color.h)
-target_link_libraries(imagemagick PRIVATE ${IM_LIBRARIES})
+target_link_libraries(imagemagick PRIVATE ${ImageMagick_LIBRARIES})
 target_compile_options(
     imagemagick PRIVATE
-    -Wfatal-errors -Werror
+    -Wfatal-errors -Werror ${ImageMagick_CFLAGS_OTHER}
     #-pedantic -Wall -Werror -Wextra -Wfatal-errors
     #-Wno-error=unused-parameter
-    ${IM_CFLAGS_OTHER}
 )
 target_include_directories(
     imagemagick PRIVATE
-    ${IM_INCLUDE_DIRS} ${CMAKE_JS_INC}
+    ${ImageMagick_INCLUDE_DIRS} ${CMAKE_JS_INC}
 )
+
 if(DEFINED CMAKE_JS_VERSION)
-set_target_properties(imagemagick PROPERTIES PREFIX "" SUFFIX ".node")
+    set_target_properties(imagemagick PROPERTIES PREFIX "" SUFFIX ".node")
 endif()

@@ -35,7 +35,7 @@ bool TypeConverter::GetArgument(v8::Local<v8::Value> val, bool& out) {
     return true;
 }
 
-bool TypeConverter::GetArgument(v8::Local<v8::Value> val,std::optional<Magick::MetricType>& metricType) {
+bool TypeConverter::GetArgument(v8::Local<v8::Value> val,Magick::MetricType& metricType) {
     uint32_t metricTypeInt;
     if(!TypeConverter::GetArgument(val,metricTypeInt)) {
         return false;

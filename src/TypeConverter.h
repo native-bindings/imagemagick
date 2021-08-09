@@ -2,7 +2,6 @@
 #define NODE_IMAGEMAGICK_TYPECONVERTER_H
 
 #include <nan.h>
-#include <optional>
 #include <Magick++.h>
 
 class TypeConverter {
@@ -12,7 +11,7 @@ public:
     static bool GetArgument(v8::Local<v8::Value>,float&);
     static bool GetArgument(v8::Local<v8::Value>,bool&);
     static bool GetArgument(v8::Local<v8::Value>,std::string&);
-    static bool GetArgument(v8::Local<v8::Value>,std::optional<Magick::MetricType>&);
+    static bool GetArgument(v8::Local<v8::Value>,Magick::MetricType&);
     static bool GetArgument(v8::Local<v8::Value> val, Magick::CompositeOperator&);
     template<typename T>
     static bool Unwrap(v8::Local<v8::Value> obj, T** out) {

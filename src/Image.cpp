@@ -4,8 +4,6 @@
 #include "Point.h"
 #include "Color.h"
 
-#include <optional>
-
 using Nan::Set;
 using v8::FunctionTemplate;
 using v8::Local;
@@ -414,15 +412,10 @@ NAN_METHOD(Image::Compare) {
         return;
     }
     try {
-        std::optional<Magick::MetricType> metricType;
-        if(!info[1]->IsUndefined()) {
-            if(!TypeConverter::GetArgument(info[1], metricType)) {
-                throw std::runtime_error("Second argument must be either a valid integer or undefined");
-            }
-        }
+        Magick::MetricType metricType;
         Local<Value> result;
-        if(metricType.has_value()) {
-            result = Nan::New(img->value.compare(ref->value,metricType.value()));
+        if(TypeConverter::GetArgument(info[1], metricType)) {
+            result = Nan::New(img->value.compare(ref->value,metricType));
         } else {
             result = Nan::New(img->value.compare(ref->value));
         }
