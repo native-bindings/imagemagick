@@ -1,7 +1,6 @@
 #include "Image.h"
 #include "TypeConverter.h"
 #include "Geometry.h"
-#include "Point.h"
 #include "Color.h"
 
 using Nan::Set;
@@ -31,6 +30,7 @@ void Image::Init(v8::Local<v8::Object> exports) {
     Nan::SetPrototypeMethod(tpl,"sample",Sample);
     Nan::SetPrototypeMethod(tpl,"normalize",Normalize);
     Nan::SetPrototypeMethod(tpl,"oilPaint",OilPaint);
+    Nan::SetPrototypeMethod(tpl,"size",Size);
     Nan::SetPrototypeMethod(tpl,"motionBlur",MotionBlur);
     Nan::SetPrototypeMethod(tpl,"resize",Resize);
     Nan::SetPrototypeMethod(tpl,"shave",Shave);
@@ -339,13 +339,8 @@ NAN_METHOD(Image::Decipher) {
 
 NAN_METHOD(Image::OilPaint) {
     double radius;
-    double sigma;
     if(!TypeConverter::GetArgument(info[0], radius)) {
         Nan::ThrowError("First argument must be a valid double-precision integer");
-        return;
-    }
-    if(!TypeConverter::GetArgument(info[1], sigma)) {
-        Nan::ThrowError("Second argument must be a valid double-precision integer");
         return;
     }
     Image* img;
@@ -354,7 +349,7 @@ NAN_METHOD(Image::OilPaint) {
         return;
     }
     try {
-        img->value.oilPaint(radius,sigma);
+        img->value.oilPaint(radius);
     } catch(std::exception& e) {
         Nan::ThrowError(e.what());
     }
@@ -450,18 +445,42 @@ NAN_METHOD(Image::Density) {
         return;
     }
     try {
-        Point* density;
+        Geometry* density;
         if(TypeConverter::Unwrap(info[0],&density)) {
             img->value.density(density->value);
             return;
         }
         Local<v8::Value> argv[] {
-            Nan::New(img->value.density().x()),
-            Nan::New(img->value.density().y())
+            Nan::New(std::string(img->value.density())).ToLocalChecked()
         };
         info.GetReturnValue().Set(Nan::NewInstance(
-            Nan::New(Point::constructor),
-            2,
+            Nan::New(Geometry::constructor),
+            1,
+            argv
+        ).ToLocalChecked());
+    } catch(std::exception& e) {
+        Nan::ThrowError(e.what());
+    }
+}
+
+NAN_METHOD(Image::Size) {
+    Image* img;
+    if(!TypeConverter::Unwrap(info.This(),&img)) {
+        Nan::ThrowError("density() called under invalid context");
+        return;
+    }
+    try {
+        Geometry* density;
+        if(TypeConverter::Unwrap(info[0],&density)) {
+            img->value.size(density->value);
+            return;
+        }
+        Local<v8::Value> argv[] {
+            Nan::New(std::string(img->value.size())).ToLocalChecked()
+        };
+        info.GetReturnValue().Set(Nan::NewInstance(
+            Nan::New(Geometry::constructor),
+            1,
             argv
         ).ToLocalChecked());
     } catch(std::exception& e) {

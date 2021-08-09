@@ -12,7 +12,7 @@ set(CMAKE_JS_INC
 endif()
 
 find_package(PkgConfig)
-pkg_check_modules(ImageMagick REQUIRED Magick++ MagickCore)
+pkg_check_modules(ImageMagick REQUIRED ImageMagick++)
 
 set(IMAGEMAGICK_COMPILE_OPTIONS ${IMAGEMAGICK_COMPILE_OPTIONS} ${ImageMagick_CFLAGS_OTHER})
 
@@ -26,8 +26,9 @@ add_library(
     src/Geometry.h
     src/TypeConverter.cpp
     src/TypeConverter.h
-    src/Point.cpp
-    src/Point.h src/Color.cpp src/Color.h)
+    src/Color.cpp
+    src/Color.h
+)
 target_link_libraries(imagemagick PRIVATE ${ImageMagick_LIBRARIES})
 target_compile_options(
     imagemagick PRIVATE

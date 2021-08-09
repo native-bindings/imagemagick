@@ -24,11 +24,6 @@ private:
         const Magick::Quantum& b,
         const Magick::Quantum& a
     );
-    Color(
-        const Magick::Quantum& cyan,const Magick::Quantum&magenta,
-        const Magick::Quantum& yellow,const Magick::Quantum&black,
-        const Magick::Quantum& alpha
-    );
     static NAN_METHOD(New);
 };
 

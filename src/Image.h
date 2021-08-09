@@ -14,6 +14,7 @@ private:
     static NAN_METHOD(BackgroundColor);
     static NAN_METHOD(Read);
     static NAN_METHOD(Write);
+    static NAN_METHOD(Size);
     static NAN_METHOD(Magick);
     static NAN_METHOD(Negate);
     static NAN_METHOD(Compare);

@@ -9,6 +9,7 @@ public:
     static bool GetArgument(v8::Local<v8::Value>,uint32_t&);
     static bool GetArgument(v8::Local<v8::Value>,double&);
     static bool GetArgument(v8::Local<v8::Value>,float&);
+    static bool GetArgument(v8::Local<v8::Value>,unsigned short&);
     static bool GetArgument(v8::Local<v8::Value>,bool&);
     static bool GetArgument(v8::Local<v8::Value>,std::string&);
     static bool GetArgument(v8::Local<v8::Value>,Magick::MetricType&);

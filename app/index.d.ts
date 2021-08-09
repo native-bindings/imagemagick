@@ -14,27 +14,26 @@ export class Geometry {
 }
 
 export enum MetricType {
-    UndefinedErrorMetric,
+    UndefinedMetric,
     AbsoluteErrorMetric,
-    FuzzErrorMetric,
     MeanAbsoluteErrorMetric,
-    MeanErrorPerPixelErrorMetric,
+    MeanErrorPerPixelMetric,
     MeanSquaredErrorMetric,
-    NormalizedCrossCorrelationErrorMetric,
     PeakAbsoluteErrorMetric,
-    PeakSignalToNoiseRatioErrorMetric,
-    PerceptualHashErrorMetric,
+    PeakSignalToNoiseRatioMetric,
     RootMeanSquaredErrorMetric,
-    StructuralSimilarityErrorMetric,
-    StructuralDissimilarityErrorMetric
+    NormalizedCrossCorrelationErrorMetric,
+    FuzzErrorMetric,
+    UndefinedErrorMetric,
+    PerceptualHashErrorMetric
 }
-  
+
 export enum CompositeOperator {
     UndefinedCompositeOp,
-    AlphaCompositeOp,
+    NoCompositeOp,
+    ModulusAddCompositeOp,
     AtopCompositeOp,
     BlendCompositeOp,
-    BlurCompositeOp,
     BumpmapCompositeOp,
     ChangeMaskCompositeOp,
     ClearCompositeOp,
@@ -47,47 +46,31 @@ export enum CompositeOperator {
     CopyCyanCompositeOp,
     CopyGreenCompositeOp,
     CopyMagentaCompositeOp,
-    CopyAlphaCompositeOp,
+    CopyOpacityCompositeOp,
     CopyRedCompositeOp,
     CopyYellowCompositeOp,
     DarkenCompositeOp,
-    DarkenIntensityCompositeOp,
-    DifferenceCompositeOp,
-    DisplaceCompositeOp,
-    DissolveCompositeOp,
-    DistortCompositeOp,
-    DivideDstCompositeOp,
-    DivideSrcCompositeOp,
     DstAtopCompositeOp,
     DstCompositeOp,
     DstInCompositeOp,
     DstOutCompositeOp,
     DstOverCompositeOp,
+    DifferenceCompositeOp,
+    DisplaceCompositeOp,
+    DissolveCompositeOp,
     ExclusionCompositeOp,
     HardLightCompositeOp,
-    HardMixCompositeOp,
     HueCompositeOp,
     InCompositeOp,
-    IntensityCompositeOp,
     LightenCompositeOp,
-    LightenIntensityCompositeOp,
-    LinearBurnCompositeOp,
-    LinearDodgeCompositeOp,
     LinearLightCompositeOp,
     LuminizeCompositeOp,
-    MathematicsCompositeOp,
     MinusDstCompositeOp,
-    MinusSrcCompositeOp,
     ModulateCompositeOp,
-    ModulusAddCompositeOp,
-    ModulusSubtractCompositeOp,
     MultiplyCompositeOp,
-    NoCompositeOp,
     OutCompositeOp,
     OverCompositeOp,
     OverlayCompositeOp,
-    PegtopLightCompositeOp,
-    PinLightCompositeOp,
     PlusCompositeOp,
     ReplaceCompositeOp,
     SaturateCompositeOp,
@@ -98,18 +81,28 @@ export enum CompositeOperator {
     SrcInCompositeOp,
     SrcOutCompositeOp,
     SrcOverCompositeOp,
+    ModulusSubtractCompositeOp,
     ThresholdCompositeOp,
-    VividLightCompositeOp,
     XorCompositeOp,
-    StereoCompositeOp,
-    FreezeCompositeOp,
-    InterpolateCompositeOp,
-    NegateCompositeOp,
-    ReflectCompositeOp,
-    SoftBurnCompositeOp,
-    SoftDodgeCompositeOp,
-    StampCompositeOp,
-    RMSECompositeOp
+    /* These are new operators, added after the above was last sorted.
+    * The list should be re-sorted only when a new library version is
+    * created.
+    */
+    DivideDstCompositeOp,
+    DistortCompositeOp,
+    BlurCompositeOp,
+    PegtopLightCompositeOp,
+    VividLightCompositeOp,
+    PinLightCompositeOp,
+    LinearDodgeCompositeOp,
+    LinearBurnCompositeOp,
+    MathematicsCompositeOp,
+    DivideSrcCompositeOp,
+    MinusSrcCompositeOp,
+    DarkenIntensityCompositeOp,
+    LightenIntensityCompositeOp,
+    HardMixCompositeOp,
+    StereoCompositeOp
 }
 
 export enum ChannelType {
@@ -148,15 +141,6 @@ export enum ChannelType {
     DefaultChannels = AllChannels
 }
 
-export class Point {
-    constructor(x: number, y: number);
-    constructor(xy: number);
-    constructor();
-    constructor(point: string);
-    x(): number;
-    y(): number;
-}
-
 export class Color {
     constructor(value: string);
     constructor(r: number, g: number, b: number);
@@ -172,7 +156,7 @@ export class Color {
 
 export class Image {
     resize(value: Geometry): void;
-    oilPaint(radius: number, sigma: number): void;
+    oilPaint(radius: number): void;
     emboss(radius: number, sigma: number): void;
     rotate(degrees: number): void;
     normalize(): void;
@@ -188,8 +172,10 @@ export class Image {
     read(value: string): void;
     decipher(value: string): void;
     encipher(value: string): void;
-    density(): Point;
-    density(value: Point): void;
+    density(): Geometry;
+    density(value: Geometry): void;
+    size(): Geometry;
+    size(value: Geometry): void;
     magick(): string;
     magick(value: string): void;
     composite(

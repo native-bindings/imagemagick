@@ -14,20 +14,11 @@ void Color::Init(v8::Local<v8::Object> exports) {
 }
 
 Color* Color::FromArguments(const Nan::FunctionCallbackInfo<v8::Value>& info) {
-    float r, g, b, a;
-    float cyan, magenta, yellow, black, alpha;
+    Magick::Quantum r, g, b, a;
     std::string colorStr;
     Color* color;
     if(TypeConverter::GetArgument(info[0],colorStr)) {
         color = new Color(colorStr);
-    } else if(
-        TypeConverter::GetArgument(info[0],cyan) &&
-        TypeConverter::GetArgument(info[1],magenta) &&
-        TypeConverter::GetArgument(info[2],yellow) &&
-        TypeConverter::GetArgument(info[3],black) &&
-        TypeConverter::GetArgument(info[4],alpha)
-    ) {
-        color = new Color(cyan, magenta, yellow, black, alpha);
     } else if(
         TypeConverter::GetArgument(info[0],r) &&
         TypeConverter::GetArgument(info[1],g) &&
@@ -75,13 +66,6 @@ Color::Color(
     const MagickCore::Quantum &blue,
     const MagickCore::Quantum &alpha
 ): value(red, green, blue, alpha) {
-
-}
-
-Color::Color(
-    const Magick::Quantum& cyan, const Magick::Quantum& magenta, const Magick::Quantum& yellow,
-    const Magick::Quantum& black, const Magick::Quantum& alpha
-): value(cyan, magenta, yellow, black, alpha) {
 
 }
 
