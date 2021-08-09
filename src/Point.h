@@ -11,7 +11,9 @@ public:
     static void Init(v8::Local<v8::Object>);
 private:
     Point(double,double);
+    static Point* FromArguments(const Nan::FunctionCallbackInfo<v8::Value>&);
     explicit Point(double);
+    Point();
     explicit Point(std::string&);
     static NAN_METHOD(New);
     static NAN_METHOD(X);

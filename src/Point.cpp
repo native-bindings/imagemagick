@@ -19,21 +19,13 @@ void Point::Init(v8::Local<v8::Object> exports) {
 }
 
 NAN_METHOD(Point::New) {
-    Point* point;
-    double x, y, xy;
-    std::string value;
-    if(TypeConverter::GetArgument(info[0],value)) {
-        point = new Point(value);
-    } else if(TypeConverter::GetArgument(info[0],x) && TypeConverter::GetArgument(info[1],y)) {
-        point = new Point(x, y);
-    } else if(TypeConverter::GetArgument(info[0],xy)) {
-        point = new Point(xy);
-    } else {
-        Nan::ThrowError("Point constructed with invalid arguments");
-        return;
+    try {
+        auto* point = FromArguments(info);
+        point->Wrap(info.This());
+        info.GetReturnValue().Set(info.This());
+    } catch(std::exception& e) {
+        Nan::ThrowError(e.what());
     }
-    point->Wrap(info.This());
-    info.GetReturnValue().Set(info.This());
 }
 
 Point::Point(std::string& value): value(value) {
@@ -64,4 +56,24 @@ NAN_METHOD(Point::Y) {
         return;
     }
     info.GetReturnValue().Set(Nan::New(p->value.y()));
+}
+
+Point *Point::FromArguments(const Nan::FunctionCallbackInfo<v8::Value>& info) {
+    Point* point;
+    double x, y, xy;
+    std::string value;
+    if(TypeConverter::GetArgument(info[0],value)) {
+        point = new Point(value);
+    } else if(TypeConverter::GetArgument(info[0],x) && TypeConverter::GetArgument(info[1],y)) {
+        point = new Point(x, y);
+    } else if(TypeConverter::GetArgument(info[0],xy)) {
+        point = new Point(xy);
+    } else {
+        point = new Point();
+    }
+    return point;
+}
+
+Point::Point(): value() {
+
 }

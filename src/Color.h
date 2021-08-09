@@ -12,6 +12,7 @@ public:
 private:
     Color();
     explicit Color(std::string&);
+    static Color* FromArguments(const Nan::FunctionCallbackInfo<v8::Value>&);
     Color(
         const Magick::Quantum& red,
         const Magick::Quantum& green,
@@ -24,9 +25,9 @@ private:
         const Magick::Quantum& a
     );
     Color(
-        const Magick::Quantum cyan,const Magick::Quantum magenta,
-        const Magick::Quantum yellow,const Magick::Quantum black,
-        const Magick::Quantum alpha
+        const Magick::Quantum& cyan,const Magick::Quantum&magenta,
+        const Magick::Quantum& yellow,const Magick::Quantum&black,
+        const Magick::Quantum& alpha
     );
     static NAN_METHOD(New);
 };

@@ -6,6 +6,7 @@
   },
   "scripts": {
     "debug":"npx cmake-js compile -C -D --out=build/Debug",
+    "prepublishOnly": "npx ts-node --project test/tsconfig.json test/test.ts",
     "postinstall": "npx cmake-js compile -C --out=build/Release"
   },
   "main":"./app/index.js",
@@ -40,5 +41,5 @@
     "typescript": "4.3.x"
   },
   "name":"image-m",
-  "version":"0.0.14"
+  "version":"0.0.16"
 }

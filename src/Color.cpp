@@ -13,7 +13,7 @@ void Color::Init(v8::Local<v8::Object> exports) {
     Nan::Set(exports,Nan::New("Color").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
 }
 
-NAN_METHOD(Color::New) {
+Color* Color::FromArguments(const Nan::FunctionCallbackInfo<v8::Value>& info) {
     float r, g, b, a;
     float cyan, magenta, yellow, black, alpha;
     std::string colorStr;
@@ -44,8 +44,17 @@ NAN_METHOD(Color::New) {
     } else {
         color = new Color();
     }
-    color->Wrap(info.This());
-    info.GetReturnValue().Set(info.This());
+    return color;
+}
+
+NAN_METHOD(Color::New) {
+    try {
+        auto* color = FromArguments(info);
+        color->Wrap(info.This());
+        info.GetReturnValue().Set(info.This());
+    } catch(std::exception& e) {
+        Nan::ThrowError(e.what());
+    }
 }
 
 Color::Color(): value() {
@@ -70,8 +79,8 @@ Color::Color(
 }
 
 Color::Color(
-    const Magick::Quantum cyan, const Magick::Quantum magenta, const Magick::Quantum yellow,
-    const Magick::Quantum black, const Magick::Quantum alpha
+    const Magick::Quantum& cyan, const Magick::Quantum& magenta, const Magick::Quantum& yellow,
+    const Magick::Quantum& black, const Magick::Quantum& alpha
 ): value(cyan, magenta, yellow, black, alpha) {
 
 }

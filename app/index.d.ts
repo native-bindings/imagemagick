@@ -151,6 +151,7 @@ export enum ChannelType {
 export class Point {
     constructor(x: number, y: number);
     constructor(xy: number);
+    constructor();
     constructor(point: string);
     x(): number;
     y(): number;
