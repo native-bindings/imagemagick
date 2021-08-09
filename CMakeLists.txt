@@ -1,0 +1,43 @@
+project(node_imagemagick CXX)
+
+cmake_minimum_required(VERSION 3.13)
+
+set(CMAKE_CXX_STANDARD 20)
+
+find_package(PkgConfig)
+pkg_check_modules(IM REQUIRED Magick++)
+
+if(NOT DEFINED CMAKE_JS_INC)
+set(CMAKE_JS_INC
+    ${CMAKE_CURRENT_SOURCE_DIR}/node_modules/nan
+    ${NODE_INSTALL_DIR}/include/node
+)
+endif()
+
+add_library(
+    imagemagick SHARED
+    ${CMAKE_JS_SRC}
+    src/main.cpp
+    src/Image.cpp
+    src/Image.h
+    src/Geometry.cpp
+    src/Geometry.h
+    src/TypeConverter.cpp
+    src/TypeConverter.h
+    src/Point.cpp
+    src/Point.h src/Color.cpp src/Color.h)
+target_link_libraries(imagemagick PRIVATE ${IM_LIBRARIES})
+target_compile_options(
+    imagemagick PRIVATE
+    -Wfatal-errors -Werror
+    #-pedantic -Wall -Werror -Wextra -Wfatal-errors
+    #-Wno-error=unused-parameter
+    ${IM_CFLAGS_OTHER}
+)
+target_include_directories(
+    imagemagick PRIVATE
+    ${IM_INCLUDE_DIRS} ${CMAKE_JS_INC}
+)
+if(DEFINED CMAKE_JS_VERSION)
+set_target_properties(imagemagick PROPERTIES PREFIX "" SUFFIX ".node")
+endif()
