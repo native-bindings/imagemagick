@@ -6,9 +6,16 @@
 yarn add image-m
 ```
 
+### Debian 10
+
+```
+apt install -y --install-recommends \
+    "libmagick++-6.q16-8" libmagick++-dev cmake
+```
+
 ### Requirements
 
-- ImageMagick 6
+- ImageMagick 6.9.12
 - C++14
 - CMake >= 3.7
 
