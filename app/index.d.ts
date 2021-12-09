@@ -151,6 +151,8 @@ export class Image {
     magick(value: string): void;
     defineValue(magick:string,key: string): string;
     defineValue(magick:string,key: string, value: string): void;
+    defineSet(magick:string,key: string): boolean;
+    defineSet(magick:string,key: string, flag: boolean): void;
     composite(
         compositeImage: Image,
         offset: Geometry,
