@@ -15,6 +15,7 @@ void Image::Init(v8::Local<v8::Object> exports) {
     tpl->SetClassName(Nan::New("Image").ToLocalChecked());
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
+    Nan::SetPrototypeMethod(tpl,"defineValue",DefineValue);
     Nan::SetPrototypeMethod(tpl,"read",Read);
     Nan::SetPrototypeMethod(tpl,"write",Write);
     Nan::SetPrototypeMethod(tpl,"composite",Composite);
@@ -42,6 +43,31 @@ void Image::Init(v8::Local<v8::Object> exports) {
     constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
 
     Set(exports,Nan::New("Image").ToLocalChecked(),Nan::GetFunction(tpl).ToLocalChecked());
+}
+
+NAN_METHOD(Image::DefineValue) {
+    std::string magick,key,value;
+    if(
+        !TypeConverter::GetArgument(info[0],magick) ||
+        !TypeConverter::GetArgument(info[1],key)
+    ){
+        Nan::ThrowError("First two arguments must always be present and be a valid string");
+        return;
+    }
+    Image* img;
+    if(!TypeConverter::Unwrap(info.This(),&img)) {
+        Nan::ThrowError("defineValue() called under invalid context");
+        return;
+    }
+    try {
+        if(TypeConverter::GetArgument(info[2],value)){
+            img->value.defineValue(magick,key,value);
+        } else {
+            info.GetReturnValue().Set(Nan::New(img->value.defineValue(magick,key)).ToLocalChecked());
+        }
+    } catch(std::exception& e) {
+        Nan::ThrowError(e.what());
+    }
 }
 
 NAN_METHOD(Image::New) {

@@ -178,6 +178,8 @@ export class Image {
     size(value: Geometry): void;
     magick(): string;
     magick(value: string): void;
+    defineValue(magick:string,key: string): string;
+    defineValue(magick:string,key: string, value: string): void;
     composite(
         compositeImage: Image,
         offset: Geometry,

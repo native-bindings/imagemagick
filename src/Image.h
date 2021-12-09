@@ -29,6 +29,7 @@ private:
     static NAN_METHOD(Shave);
     static NAN_METHOD(Sample);
     static NAN_METHOD(Composite);
+    static NAN_METHOD(DefineValue);
     static NAN_METHOD(Resize);
     static NAN_METHOD(Normalize);
     static NAN_METHOD(OilPaint);

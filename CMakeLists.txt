@@ -4,6 +4,8 @@ cmake_minimum_required(VERSION 3.7)
 
 set(CMAKE_CXX_STANDARD 14)
 
+option(NODE_INSTALL_DIR "Node installation directory")
+
 if(NOT DEFINED CMAKE_JS_INC)
 set(CMAKE_JS_INC
     ${CMAKE_CURRENT_SOURCE_DIR}/node_modules/nan
@@ -28,7 +30,7 @@ add_library(
     src/TypeConverter.h
     src/Color.cpp
     src/Color.h
-)
+        src/Constants.cpp src/Constants.h)
 target_link_libraries(imagemagick PRIVATE ${ImageMagick_LIBRARIES})
 target_compile_options(
     imagemagick PRIVATE
