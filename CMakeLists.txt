@@ -14,7 +14,7 @@ set(CMAKE_JS_INC
 endif()
 
 find_package(PkgConfig)
-pkg_check_modules(ImageMagick REQUIRED ImageMagick++)
+pkg_check_modules(ImageMagick REQUIRED ImageMagick)
 
 set(IMAGEMAGICK_COMPILE_OPTIONS ${IMAGEMAGICK_COMPILE_OPTIONS} ${ImageMagick_CFLAGS_OTHER})
 

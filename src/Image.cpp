@@ -2,6 +2,7 @@
 #include "TypeConverter.h"
 #include "Geometry.h"
 #include "Color.h"
+#include "Point.h"
 
 using Nan::Set;
 using v8::FunctionTemplate;
@@ -498,7 +499,7 @@ NAN_METHOD(Image::Density) {
         return;
     }
     try {
-        Geometry* density;
+        Point* density;
         if(TypeConverter::Unwrap(info[0],&density)) {
             img->value.density(density->value);
             return;
@@ -507,7 +508,7 @@ NAN_METHOD(Image::Density) {
             Nan::New(std::string(img->value.density())).ToLocalChecked()
         };
         info.GetReturnValue().Set(Nan::NewInstance(
-            Nan::New(Geometry::constructor),
+            Nan::New(Point::constructor),
             1,
             argv
         ).ToLocalChecked());

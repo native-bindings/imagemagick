@@ -1,4 +1,5 @@
-node_modules/
-cmake-build-*/
-.idea/
-build/
+/node_modules
+/cmake-build-*
+/.idea
+/build
+/.history

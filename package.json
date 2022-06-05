@@ -5,12 +5,12 @@
     "tslib": "2.x"
   },
   "scripts": {
-    "debug":"npx cmake-js compile -C -D --out=build/Debug",
+    "debug": "npx cmake-js compile -C -D --out=build/Debug",
     "prepublishOnly": "npx ts-node --project test/tsconfig.json test/test.ts",
     "postinstall": "npx cmake-js compile -C --out=build/Release"
   },
-  "main":"./app/index.js",
-  "typings":"./app/index.d.ts",
+  "main": "./app/index.js",
+  "typings": "./app/index.d.ts",
   "license": "MIT",
   "files": [
     "LICENSE",
@@ -35,12 +35,12 @@
     "url": "https://victorqueiroz.dev"
   },
   "devDependencies": {
-    "@types/node": "^16.4.13",
-    "eslint": "^7.32.0",
-    "ts-node": "^10.2.0",
+    "@types/node": "16.x",
+    "eslint": "8.x",
+    "ts-node": "10.x",
     "typescript": "4.3.x"
   },
-  "description": "ImageMagick 6 bindings for Node.js",
-  "name":"image-m",
-  "version":"0.1.1"
+  "description": "ImageMagick 7 bindings for Node.js",
+  "name": "image-m",
+  "version": "1.0.0"
 }
