@@ -8,7 +8,7 @@
     "test": "yarn build && NODE_ENV=development npx ts-node --project test/tsconfig.json test/test.ts",
     "debug": "npx cmake-js compile -C -D --out=build/debug",
     "prepublishOnly": "yarn test",
-    "build":"./ImageMagick6-cmake/configure.sh && yarn debug && npx cmake-js compile -C --out=build/release",
+    "build": "./ImageMagick6-cmake/configure.sh && yarn debug && npx cmake-js compile -C --out=build/release",
     "postinstall": "yarn build"
   },
   "main": "./app/index.js",
@@ -45,5 +45,5 @@
   },
   "description": "ImageMagick 6 bindings for Node.js",
   "name": "image-m",
-  "version": "0.1.1"
+  "version": "0.1.2"
 }
