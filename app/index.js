@@ -1,8 +1,24 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
-Object.assign(exports, (
-    process.env['NODE_ENV'] === 'development' ?
-        require('../build/Debug/Debug/imagemagick') :
-        require('../build/Release/Release/imagemagick')
-));
+const devBinary = '../build/debug/Debug/node_imagemagick';
+const paths = [
+    '../build/release/Release/node_imagemagick'
+];
+
+if(process.env['NODE_ENV'] === 'development'){
+    paths.unshift(devBinary);
+} else {
+    paths.push(devBinary);
+}
+
+for(const p of paths){
+    try {
+        Object.assign(exports, require(p));
+    } catch(reason){
+        if(p === paths[paths.length - 1]){
+            throw reason;
+        }
+    }
+}
+

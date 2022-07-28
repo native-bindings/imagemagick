@@ -1,4 +1,8 @@
-node_modules/
-cmake-build-*/
-.idea/
-build/
+/node_modules
+/.idea
+/build
+/cmake-*
+/.vscode
+/.history
+/ImageMagick6-cmake/CFLAGS
+/ImageMagick6-cmake/CPPFLAGS

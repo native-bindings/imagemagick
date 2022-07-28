@@ -1,0 +1,3 @@
+[submodule "ImageMagick6"]
+	path = ImageMagick6
+	url = git@github.com:ImageMagick/ImageMagick6.git

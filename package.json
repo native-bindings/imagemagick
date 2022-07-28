@@ -5,16 +5,19 @@
     "tslib": "2.x"
   },
   "scripts": {
-    "debug":"npx cmake-js compile -C -D --out=build/Debug",
-    "prepublishOnly": "npx ts-node --project test/tsconfig.json test/test.ts",
-    "postinstall": "npx cmake-js compile -C --out=build/Release"
+    "test": "yarn build && NODE_ENV=development npx ts-node --project test/tsconfig.json test/test.ts",
+    "debug": "npx cmake-js compile -C -D --out=build/debug",
+    "prepublishOnly": "yarn test",
+    "build":"./ImageMagick6-cmake/configure.sh && yarn debug && npx cmake-js compile -C --out=build/release",
+    "postinstall": "yarn build"
   },
-  "main":"./app/index.js",
-  "typings":"./app/index.d.ts",
+  "main": "./app/index.js",
+  "typings": "./app/index.d.ts",
   "license": "MIT",
   "files": [
     "LICENSE",
     "CMakeLists.txt",
+    "ImageMagick6",
     "src/**/*.{cpp,h}",
     "app/**/*.{js,d.ts}"
   ],
@@ -41,6 +44,6 @@
     "typescript": "4.3.x"
   },
   "description": "ImageMagick 6 bindings for Node.js",
-  "name":"image-m",
-  "version":"0.1.1"
+  "name": "image-m",
+  "version": "0.1.1"
 }
