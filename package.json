@@ -5,10 +5,11 @@
     "tslib": "2.x"
   },
   "scripts": {
-    "test": "yarn build && NODE_ENV=development npx ts-node --project test/tsconfig.json test/test.ts",
+    "test": "npx ts-node --project test/tsconfig.json test/test.ts",
     "debug": "npx cmake-js compile -C -D --out=build/debug",
-    "prepublishOnly": "yarn test",
-    "build": "./ImageMagick6-cmake/configure.sh && yarn debug && npx cmake-js compile -C --out=build/release",
+    "prepublishOnly": "yarn build && yarn debug && yarn test && NODE_ENV=development yarn test",
+    "generate-flag-files":"npx cmake-js compile -C --out=build/release",
+    "build": "./ImageMagick6-cmake/configure.sh && yarn run generate-flag-files",
     "postinstall": "yarn build"
   },
   "main": "./app/index.js",

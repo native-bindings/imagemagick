@@ -11,9 +11,23 @@ import path from 'path';
         const key = match[2];
         const fullMatch = match[0];
         assert.strict.ok(fullMatch && key);
-        return [key,l.substring(fullMatch.length).trim().split(' ').join('\n')];
+        return [key,l.substring(fullMatch.length).trim().split(' ').filter(s => s.trim().length > 0).join('\n')];
     }));
     const dest = path.resolve(__dirname,'../ImageMagick6-cmake');
+    let cFlags = flags.get('CFLAGS');
+    const includeDirs = new Set<string>();
+    if(cFlags){
+        const includeFlag = '-I';
+        const allFlags = new Set(cFlags.split('\n'));
+        for(const flag of allFlags){
+            const includeFlagIndex = flag.indexOf(includeFlag);
+            if(includeFlagIndex === -1) continue;
+            includeDirs.add(flag.substring(includeFlagIndex + includeFlag.length));
+            allFlags.delete(flag);
+        }
+        flags.set('CFLAGS',Array.from(allFlags).join('\n'));
+        flags.set('INCLUDE_DIRS',Array.from(includeDirs).join('\n'));
+    }
     for(const [key,value] of flags){
         await fs.promises.writeFile(
             path.resolve(dest,`${key}`),
