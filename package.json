@@ -8,7 +8,8 @@
     "test": "npx ts-node --project test/tsconfig.json test/test.ts",
     "prepublishOnly": "yarn force-build-all && yarn test && NODE_ENV=development yarn test",
     "build-all": "./scripts/build-all.sh",
-    "force-build-all": "./scripts/configure-imagemagick.sh && ./scripts/build-all.sh"
+    "force-build-all": "./scripts/configure-imagemagick.sh && ./scripts/build-all.sh",
+    "postinstall": "yarn run force-build-all"
   },
   "main": "./app/index.js",
   "typings": "./app/index.d.ts",
