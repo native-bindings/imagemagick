@@ -1,7 +1,7 @@
 {
   "dependencies": {
-    "cmake-js": "6.2.x",
-    "nan": "2.15.x",
+    "cmake-js": "6.x",
+    "nan": "2.x",
     "tslib": "2.x"
   },
   "scripts": {
@@ -39,9 +39,9 @@
     "url": "https://victorqueiroz.dev"
   },
   "devDependencies": {
-    "@types/node": "^16.4.13",
-    "eslint": "^7.32.0",
-    "ts-node": "^10.2.0",
+    "@types/node": "16.x",
+    "eslint": "8.x",
+    "ts-node": "10.x",
     "typescript": "4.3.x"
   },
   "description": "ImageMagick 6 bindings for Node.js",
