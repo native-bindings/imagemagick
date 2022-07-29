@@ -3,6 +3,7 @@ project(node_node_imagemagick C CXX)
 cmake_minimum_required(VERSION 3.7)
 
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_C_STANDARD 11)
 
 option(NODE_INSTALL_DIR "Node installation directory")
 
@@ -13,12 +14,8 @@ set(CMAKE_JS_INC
 )
 endif()
 
-add_subdirectory(ImageMagick6-cmake)
-
-# find_package(PkgConfig)
-# pkg_check_modules(ImageMagick REQUIRED ImageMagick++)
-
-# set(IMAGEMAGICK_COMPILE_OPTIONS ${IMAGEMAGICK_COMPILE_OPTIONS} ${ImageMagick_CFLAGS_OTHER})
+find_package(PkgConfig)
+pkg_check_modules(ImageMagick REQUIRED ImageMagick++ MagickCore)
 
 add_library(
     node_imagemagick SHARED
@@ -35,14 +32,19 @@ add_library(
     src/Constants.cpp
     src/Constants.h
 )
-target_link_libraries(node_imagemagick PRIVATE ImageMagick6)
+target_link_libraries(node_imagemagick PRIVATE ${ImageMagick_LINK_LIBRARIES})
 target_compile_options(
     node_imagemagick PRIVATE
     -Wfatal-errors
     #-pedantic -Wall -Werror -Wextra -Wfatal-errors
     # -Wno-error=unused-parameter
+    ${ImageMagick_CFLAGS_OTHER}
 )
-target_include_directories(node_imagemagick PRIVATE ${CMAKE_JS_INC})
+target_include_directories(
+    node_imagemagick
+    PRIVATE ${CMAKE_JS_INC} ${ImageMagick_INCLUDE_DIRS}
+)
+target_link_directories(node_imagemagick PRIVATE ${})
 
 if(DEFINED CMAKE_JS_VERSION)
     set_target_properties(node_imagemagick PROPERTIES PREFIX "" SUFFIX ".node")

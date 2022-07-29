@@ -4,6 +4,4 @@
 /cmake-*
 /.vscode
 /.history
-/ImageMagick6-cmake/CFLAGS
-/ImageMagick6-cmake/CPPFLAGS
-/ImageMagick6-cmake/INCLUDE_DIRS
+/ImageMagick6-out
