@@ -9,7 +9,7 @@
     "prepublishOnly": "yarn force-build-all && yarn test && NODE_ENV=development yarn test",
     "build-all": "./scripts/build-all.sh",
     "force-build-all": "./scripts/configure-imagemagick.sh && ./scripts/build-all.sh",
-    "preinstall": "yarn run force-build-all",
+    "preinstall": "./scripts/configure-imagemagick.sh",
     "postinstall": "./scripts/build-all.sh"
   },
   "main": "./app/index.js",
