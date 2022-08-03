@@ -1,6 +1,7 @@
+#!/bin/bash
+
 DATAROOTDIR=$PWD/ImageMagick6-out
 cd ImageMagick6
-if [ ! -e config/configure.xml ]
-then
+if [ ! -f config/configure.xml ]; then
     ./configure --prefix=$DATAROOTDIR
 fi
