@@ -47,5 +47,5 @@
   },
   "description": "ImageMagick 6 bindings for Node.js",
   "name": "image-m",
-  "version": "0.1.8"
+  "version": "0.1.9"
 }
