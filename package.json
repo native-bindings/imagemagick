@@ -1,49 +1,51 @@
 {
-  "dependencies": {
-    "cmake-js": "6.x",
-    "nan": "2.x",
-    "tslib": "2.x"
-  },
-  "scripts": {
-    "test": "npx ts-node --project test/tsconfig.json test/test.ts",
-    "prepublishOnly": "yarn build-all && yarn test && NODE_ENV=development yarn test",
-    "build-all": "./scripts/configure-imagemagick.sh && ./scripts/build-all.sh",
-    "postinstall": "yarn run build-all"
-  },
-  "main": "./app/index.js",
-  "typings": "./app/index.d.ts",
-  "license": "MIT",
-  "files": [
-    "LICENSE",
-    "CMakeLists.txt",
-    "ImageMagick6",
-    "scripts",
-    "src/**/*.{cpp,h}",
-    "app/**/*.{js,d.ts}"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/VictorQueiroz/image-m"
-  },
-  "keywords": [
-    "imagemagick",
-    "bindings",
-    "native",
-    "image-processing",
-    "image"
-  ],
-  "author": {
-    "name": "Victor Queiroz",
-    "email": "victorcqueirozg@gmail.com",
-    "url": "https://victorqueiroz.dev"
-  },
-  "devDependencies": {
-    "@types/node": "16.x",
-    "eslint": "8.x",
-    "ts-node": "10.x",
-    "typescript": "4.3.x"
-  },
-  "description": "ImageMagick 6 bindings for Node.js",
-  "name": "image-m",
-  "version": "0.1.12"
+    "dependencies": {
+        "child-process-utilities": "^0.0.10",
+        "cmake-js": "6.x",
+        "nan": "2.x",
+        "tslib": "2.x"
+    },
+    "scripts": {
+        "test": "npx ts-node --project test/tsconfig.json test/test.ts",
+        "prepublishOnly": "npx tsc -b scripts --force && npm run cli -- --configure && npm run test && NODE_ENV=development npm run test",
+        "cli": "node scripts",
+        "postinstall": "npm run cli -- --configure"
+    },
+    "main": "./app/index.js",
+    "typings": "./app/index.d.ts",
+    "license": "MIT",
+    "files": [
+        "LICENSE",
+        "CMakeLists.txt",
+        "ImageMagick6",
+        "scripts",
+        "src/**/*.{cpp,h}",
+        "app/**/*.{js,d.ts}"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/VictorQueiroz/image-m"
+    },
+    "keywords": [
+        "imagemagick",
+        "bindings",
+        "native",
+        "image-processing",
+        "image"
+    ],
+    "author": {
+        "name": "Victor Queiroz",
+        "email": "victorcqueirozg@gmail.com",
+        "url": "https://jscriptlab.online"
+    },
+    "devDependencies": {
+        "@types/node": "16.x",
+        "cli-argument-helper": "^0.0.8",
+        "eslint": "8.x",
+        "ts-node": "10.x",
+        "typescript": "4.3.x"
+    },
+    "description": "ImageMagick 6 bindings for Node.js",
+    "name": "image-m",
+    "version": "1.1.1"
 }

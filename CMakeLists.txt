@@ -1,6 +1,6 @@
-project(node_node_imagemagick C CXX)
-
 cmake_minimum_required(VERSION 3.7)
+
+project(node_node_imagemagick C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_C_STANDARD 11)
@@ -10,12 +10,17 @@ option(NODE_INSTALL_DIR "Node installation directory")
 if(NOT DEFINED CMAKE_JS_INC)
 set(CMAKE_JS_INC
     ${CMAKE_CURRENT_SOURCE_DIR}/node_modules/nan
-    ${NODE_INSTALL_DIR}/include/node
+    $ENV{NVM_INC}
 )
 endif()
 
+set(ENV{PKG_CONFIG_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/ImageMagick6-out/lib/pkgconfig")
+
 find_package(PkgConfig)
-pkg_check_modules(ImageMagick REQUIRED ImageMagick++ MagickCore)
+pkg_check_modules(
+    ImageMagick REQUIRED
+    ImageMagick++ MagickCore
+)
 
 add_library(
     node_imagemagick SHARED
@@ -44,7 +49,6 @@ target_include_directories(
     node_imagemagick
     PRIVATE ${CMAKE_JS_INC} ${ImageMagick_INCLUDE_DIRS}
 )
-target_link_directories(node_imagemagick PRIVATE ${})
 
 if(DEFINED CMAKE_JS_VERSION)
     set_target_properties(node_imagemagick PROPERTIES PREFIX "" SUFFIX ".node")

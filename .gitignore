@@ -5,3 +5,7 @@
 /.vscode
 /.history
 /ImageMagick6-out
+*.js
+*.map
+*.d.ts
+tsconfig.tsbuildinfo
