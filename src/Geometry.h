@@ -14,6 +14,7 @@ private:
     static NAN_METHOD(Width);
     static NAN_METHOD(IsValid);
     static NAN_METHOD(Height);
+    static NAN_METHOD(Aspect);
     Geometry(size_t,size_t,ssize_t,ssize_t);
     Geometry(std::string&);
 };

@@ -9,6 +9,8 @@ export class Geometry {
     isValid(): boolean;
     width(): number;
     width(value: number): void;
+    aspect(): number;
+    aspect(value: number): void;
     height(): number;
     height(value: number): void;
 }

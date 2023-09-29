@@ -5,6 +5,20 @@
 
 Nan::Persistent<v8::Function> Geometry::constructor;
 
+NAN_METHOD(Geometry::Aspect) {
+    Geometry* g;
+    if(!TypeConverter::Unwrap(info.This(),&g)) {
+        Nan::ThrowError("aspect() called under invalid context");
+        return;
+    }
+    bool newValue;
+    if(TypeConverter::GetArgument(info[0], newValue)){
+        g->value.aspect(newValue);
+    } else {
+        info.GetReturnValue().Set(Nan::New(g->value.aspect()));
+    }
+}
+
 void Geometry::Init(v8::Local<v8::Object> exports) {
     auto tpl = Nan::New<v8::FunctionTemplate>(New);
 
@@ -13,6 +27,7 @@ void Geometry::Init(v8::Local<v8::Object> exports) {
 
     Nan::SetPrototypeMethod(tpl,"width",Width);
     Nan::SetPrototypeMethod(tpl,"isValid",IsValid);
+    Nan::SetPrototypeMethod(tpl,"aspect",Aspect);
     Nan::SetPrototypeMethod(tpl,"height",Height);
 
     constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
