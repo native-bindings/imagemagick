@@ -19,9 +19,10 @@
         "LICENSE",
         "CMakeLists.txt",
         "deps",
-        "scripts",
-        "src/**/*.{cpp,h}",
-        "app/**/*.{js,d.ts}"
+        "scripts/**/*.{js,map,ts,d.ts}",
+        "pkgconfig/**/*.{js,map,ts,d.ts}",
+        "app/**/*.{js,map,ts,d.ts}",
+        "src/**/*.{cpp,h}"
     ],
     "repository": {
         "type": "git",
