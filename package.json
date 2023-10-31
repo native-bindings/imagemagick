@@ -1,6 +1,7 @@
 {
     "dependencies": {
         "child-process-utilities": "^0.0.10",
+        "cli-argument-helper": "^0.0.8",
         "cmake-js": "6.x",
         "nan": "2.x",
         "tslib": "2.x"
@@ -42,7 +43,6 @@
         "@types/node": "^20.8.9",
         "ava": "^5.3.1",
         "c8": "^8.0.1",
-        "cli-argument-helper": "^0.0.8",
         "eslint": "8.x",
         "glob": "^10.3.10",
         "textstreamjs": "^0.0.4",
