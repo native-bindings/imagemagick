@@ -8,19 +8,13 @@ set(CMAKE_C_STANDARD 11)
 option(NODE_INSTALL_DIR "Node installation directory")
 
 if(NOT DEFINED CMAKE_JS_INC)
-set(CMAKE_JS_INC
-    ${CMAKE_CURRENT_SOURCE_DIR}/node_modules/nan
-    $ENV{NVM_INC}
-)
+    set(CMAKE_JS_INC
+        ${CMAKE_CURRENT_SOURCE_DIR}/node_modules/nan
+        $ENV{NVM_INC}
+    )
 endif()
 
-set(ENV{PKG_CONFIG_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/ImageMagick6-out/lib/pkgconfig")
-
-find_package(PkgConfig)
-pkg_check_modules(
-    ImageMagick REQUIRED
-    ImageMagick++ MagickCore
-)
+add_subdirectory(libs)
 
 add_library(
     node_imagemagick SHARED
@@ -37,17 +31,16 @@ add_library(
     src/Constants.cpp
     src/Constants.h
 )
-target_link_libraries(node_imagemagick PRIVATE ${ImageMagick_LINK_LIBRARIES})
+target_link_libraries(node_imagemagick PRIVATE Magick++)
 target_compile_options(
     node_imagemagick PRIVATE
     -Wfatal-errors
     #-pedantic -Wall -Werror -Wextra -Wfatal-errors
     # -Wno-error=unused-parameter
-    ${ImageMagick_CFLAGS_OTHER}
 )
 target_include_directories(
     node_imagemagick
-    PRIVATE ${CMAKE_JS_INC} ${ImageMagick_INCLUDE_DIRS}
+    PRIVATE ${CMAKE_JS_INC}
 )
 
 if(DEFINED CMAKE_JS_VERSION)

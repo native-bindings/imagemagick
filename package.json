@@ -6,7 +6,7 @@
         "tslib": "2.x"
     },
     "scripts": {
-        "test": "npx ts-node --project test/tsconfig.json test/test.ts",
+        "test": "npx tsc -b test --force && npx ava test/test.js",
         "prepublishOnly": "npx tsc -b scripts --force && npm run cli -- --configure && npm run test && NODE_ENV=development npm run test",
         "cli": "node scripts",
         "postinstall": "npm run cli -- --configure"
@@ -17,7 +17,7 @@
     "files": [
         "LICENSE",
         "CMakeLists.txt",
-        "ImageMagick6",
+        "deps",
         "scripts",
         "src/**/*.{cpp,h}",
         "app/**/*.{js,d.ts}"
@@ -39,12 +39,17 @@
         "url": "https://jscriptlab.online"
     },
     "devDependencies": {
-        "@types/node": "16.x",
+        "@types/node": "^20.8.9",
+        "ava": "^5.3.1",
+        "c8": "^8.0.1",
         "cli-argument-helper": "^0.0.8",
         "eslint": "8.x",
-        "ts-node": "10.x",
-        "typescript": "4.3.x"
+        "glob": "^10.3.10",
+        "textstreamjs": "^0.0.4",
+        "ts-node": "^10.9.1",
+        "typescript": "^5.2.2"
     },
+    "type": "commonjs",
     "description": "ImageMagick 6 bindings for Node.js",
     "name": "@native-bindings/imagemagick6",
     "version": "1.1.2"

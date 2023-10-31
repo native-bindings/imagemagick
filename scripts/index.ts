@@ -1,63 +1,49 @@
 import { spawn } from "child-process-utilities";
 import path from "path";
 import { getArgument } from "cli-argument-helper";
+import Compiler, { ILibrary } from "../pkgconfig/Compiler";
+import InterfaceLibrariesGenerator from "../pkgconfig/InterfaceLibrariesGenerator";
+
+const libsDir = path.resolve(__dirname, "../libs");
 
 (async () => {
     const args = process.argv.slice(2);
-    const PKG_CONFIG_PATH = path.resolve(
-        __dirname,
-        "../ImageMagick6-out/lib/pkgconfig"
-    );
-    const srcFolder = path.resolve(__dirname, "../ImageMagick6");
-    if (getArgument(args, "--configure") !== null) {
-        await spawn(
-            "./configure",
-            ["--prefix", path.resolve(__dirname, "../ImageMagick6-out")],
-            {
-                cwd: srcFolder,
-            }
-        ).wait();
-    }
-    await spawn("make", [], {
-        cwd: srcFolder,
-    }).wait();
-    await spawn("make", ["install"], {
-        cwd: srcFolder,
-    }).wait();
-
-    await spawn(
-        "npx",
-        [
-            "cmake-js",
-            "compile",
-            "-C",
-            "--out",
-            path.resolve(__dirname, "../build/release"),
-        ],
+    const configure = getArgument(args, "--configure") !== null;
+    const libraries: ILibrary[] = [
         {
-            env: {
-                ...process.env,
-                PKG_CONFIG_PATH,
-            },
-        }
-    ).wait();
-    await spawn(
-        "npx",
-        [
+            sourceDir: path.resolve(__dirname, "../deps/ImageMagick-6.9.12-98"),
+        },
+    ];
+
+    const compiler = new Compiler(libsDir, libraries);
+    const interfaceLibrariesGenerator = new InterfaceLibrariesGenerator(
+        libsDir
+    );
+
+    await compiler.compile({
+        configure,
+    });
+
+    await interfaceLibrariesGenerator.generateInterfaceLibraries(libraries);
+
+    await spawn("npx", [
+        "cmake-js",
+        "compile",
+        "-C",
+        "--out",
+        path.resolve(__dirname, "../build/release"),
+    ]).wait();
+
+    if (getArgument(args, "--production") === null) {
+        await spawn("npx", [
             "cmake-js",
             "compile",
             "-C",
             "-D",
             "--out",
             path.resolve(__dirname, "../build/debug"),
-        ],
-        {
-            env: {
-                ...process.env,
-                PKG_CONFIG_PATH,
-            },
-        }
-    ).wait();
+        ]).wait();
+    }
 })().catch((reason) => {
     process.exitCode = 1;
     console.error(reason);
