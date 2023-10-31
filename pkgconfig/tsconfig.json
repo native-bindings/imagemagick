@@ -1,0 +1,13 @@
+{
+    "extends": "../tsconfig.base.json",
+    "compilerOptions": {},
+    "include": [
+        "resolveVariables.ts",
+        "parseArgumentsLine.ts",
+        "Compiler.ts",
+        "getPrefixFromSourceDir.ts",
+        "InterfaceLibrariesGenerator.ts",
+        "mapVariablePositions.ts",
+        "PkgConfigFileParser.ts"
+    ]
+}
