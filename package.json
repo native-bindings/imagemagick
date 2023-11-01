@@ -3,6 +3,7 @@
         "child-process-utilities": "^0.0.10",
         "cli-argument-helper": "^0.0.8",
         "cmake-js": "6.x",
+        "glob": "^10.3.10",
         "nan": "2.x",
         "textstreamjs": "^0.0.4",
         "tslib": "2.x"
@@ -46,7 +47,6 @@
         "ava": "^5.3.1",
         "c8": "^8.0.1",
         "eslint": "8.x",
-        "glob": "^10.3.10",
         "ts-node": "^10.9.1",
         "typescript": "^5.2.2"
     },
