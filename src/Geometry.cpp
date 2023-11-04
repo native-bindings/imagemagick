@@ -1,5 +1,5 @@
 #include "Geometry.h"
-#include "TypeConverter.h"
+#include "core/Arguments.h"
 
 #include <nan.h>
 
@@ -7,12 +7,12 @@ Nan::Persistent<v8::Function> Geometry::constructor;
 
 NAN_METHOD(Geometry::Aspect) {
     Geometry* g;
-    if(!TypeConverter::Unwrap(info.This(),&g)) {
-        Nan::ThrowError("aspect() called under invalid context");
+    Arguments args(info, "aspect");
+    if(!args.Unwrap(g)) {
         return;
     }
     bool newValue;
-    if(TypeConverter::GetArgument(info[0], newValue)){
+    if(args.Convert(0, newValue)){
         g->value.aspect(newValue);
     } else {
         info.GetReturnValue().Set(Nan::New(g->value.aspect()));
@@ -37,12 +37,15 @@ void Geometry::Init(v8::Local<v8::Object> exports) {
 
 NAN_METHOD(Geometry::Width) {
     Geometry* g;
-    if(!TypeConverter::Unwrap(info.This(),&g)) {
-        Nan::ThrowError("width() called under invalid context");
+    Arguments args(info, "width");
+    if(!args.Unwrap(g)) {
         return;
     }
     uint32_t value;
-    if(TypeConverter::GetArgument(info[0],value)) {
+    if(!info[0]->IsUndefined()) {
+        if(!args.Convert(0, value)) {
+            return;
+        }
         g->value.width(value);
         return;
     }
@@ -51,8 +54,8 @@ NAN_METHOD(Geometry::Width) {
 
 NAN_METHOD(Geometry::IsValid) {
     Geometry* g;
-    if(!TypeConverter::Unwrap(info.This(),&g)) {
-        Nan::ThrowError("width() called under invalid context");
+    Arguments args(info, "isValid");
+    if(!args.Unwrap(g)) {
         return;
     }
     info.GetReturnValue().Set(g->value.isValid());
@@ -60,12 +63,15 @@ NAN_METHOD(Geometry::IsValid) {
 
 NAN_METHOD(Geometry::Height) {
     Geometry* g;
-    if(!TypeConverter::Unwrap(info.This(),&g)) {
-        Nan::ThrowError("width() called under invalid context");
+    Arguments args(info, "height");
+    if(!args.Unwrap(g)) {
         return;
     }
     uint32_t value;
-    if(TypeConverter::GetArgument(info[0],value)) {
+    if(!info[0]->IsUndefined()) {
+        if(!args.Convert(0, value)) {
+            return;
+        }
         g->value.height(value);
         return;
     }
@@ -75,27 +81,26 @@ NAN_METHOD(Geometry::Height) {
 NAN_METHOD(Geometry::New) {
     Geometry* geometry;
     std::string value;
-    if(TypeConverter::GetArgument(info[0],value)) {
+    Arguments args(info, "constructor");
+    /**
+     * if second argument is undefined, we must have a string in the first argument
+     */
+    if(!args.HasArgument(1)) {
+        if(!args.Convert(0, value)) {
+            return;
+        }
         geometry = new Geometry(value);
     } else {
         uint32_t width;
         uint32_t height;
         uint32_t xOff;
         uint32_t yOff;
-        if(!TypeConverter::GetArgument(info[0],width)) {
-            Nan::ThrowError("First argument must be a valid unsigned 32-bit integer");
-            return;
-        }
-        if(!TypeConverter::GetArgument(info[1],height)) {
-            Nan::ThrowError("Second argument must be a valid unsigned 32-bit integer");
-            return;
-        }
-        if(!TypeConverter::GetArgument(info[2],xOff)) {
-            Nan::ThrowError("Third argument must be a valid unsigned 32-bit integer");
-            return;
-        }
-        if(!TypeConverter::GetArgument(info[3],yOff)) {
-            Nan::ThrowError("Forth argument must be a valid unsigned 32-bit integer");
+        if(
+            !args.Convert(0, width) ||
+            !args.Convert(1, height) ||
+            !args.Convert(2, xOff) ||
+            !args.Convert(3, yOff)
+        ) {
             return;
         }
         geometry = new Geometry(width,height,xOff,yOff);

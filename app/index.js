@@ -1,5 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+// "use strict";
+// Object.defineProperty(exports, "__esModule", { value: true });
 
 const devBinary = "../build/debug/Debug/node_imagemagick";
 const paths = ["../build/release/Release/node_imagemagick"];

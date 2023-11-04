@@ -2,5 +2,5 @@
     "extends": "../tsconfig.base.json",
     "compilerOptions": {},
     "include": ["test.ts"],
-    "references": [{ "path": "../pkgconfig" }]
+    "references": [{ "path": "../core" }]
 }

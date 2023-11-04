@@ -1,5 +1,5 @@
 #include "Color.h"
-#include "TypeConverter.h"
+#include "core/Arguments.h"
 
 Nan::Persistent<v8::Function> Color::constructor;
 
@@ -13,24 +13,36 @@ void Color::Init(v8::Local<v8::Object> exports) {
     Nan::Set(exports,Nan::New("Color").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
 }
 
-Color* Color::FromArguments(const Nan::FunctionCallbackInfo<v8::Value>& info) {
+Color* Color::FromArguments(Nan::NAN_METHOD_ARGS_TYPE info) {
     Magick::Quantum r, g, b, a;
     std::string colorStr;
     Color* color;
-    if(TypeConverter::GetArgument(info[0],colorStr)) {
+    Arguments args(info, "Color#constructor");
+    if(info[0]->IsString()) {
+        if(!args.Convert(0, colorStr)) {
+            return nullptr;
+        }
         color = new Color(colorStr);
-    } else if(
-        TypeConverter::GetArgument(info[0],r) &&
-        TypeConverter::GetArgument(info[1],g) &&
-        TypeConverter::GetArgument(info[2],b) &&
-        TypeConverter::GetArgument(info[3],a)
-    ) {
+    } else if(!info[3]->IsUndefined()) { // if the forth argument is not undefined, we must have an RGBA color
+        if(
+            !args.Convert(0, r) ||
+            !args.Convert(1, g) ||
+            !args.Convert(2, b) ||
+            !args.Convert(3, a)
+        ) {
+            return nullptr;
+        }
         color = new Color(r, g, b, a);
     } else if(
-        TypeConverter::GetArgument(info[0],r) &&
-        TypeConverter::GetArgument(info[1],g) &&
-        TypeConverter::GetArgument(info[2],b)
-    ) {
+        !info[0]->IsUndefined()
+    ) { // if the first argument is not undefined, we must have an RGB color
+        if(
+            !args.Convert(0, r) ||
+            !args.Convert(1, g) ||
+            !args.Convert(2, b)
+        ) {
+            return nullptr;
+        }
         color = new Color(r, g, b);
     } else {
         color = new Color();
@@ -41,6 +53,9 @@ Color* Color::FromArguments(const Nan::FunctionCallbackInfo<v8::Value>& info) {
 NAN_METHOD(Color::New) {
     try {
         auto* color = FromArguments(info);
+        if(!color){
+            return;
+        }
         color->Wrap(info.This());
         info.GetReturnValue().Set(info.This());
     } catch(std::exception& e) {

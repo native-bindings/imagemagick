@@ -1,7 +1,8 @@
 #include "Image.h"
-#include "TypeConverter.h"
+#include "core/Arguments.h"
 #include "Geometry.h"
 #include "Color.h"
+#include "Constants.h"
 
 using Nan::Set;
 using v8::FunctionTemplate;
@@ -37,6 +38,7 @@ void Image::Init(v8::Local<v8::Object> exports) {
     Nan::SetPrototypeMethod(tpl,"resize",Resize);
     Nan::SetPrototypeMethod(tpl,"shave",Shave);
     Nan::SetPrototypeMethod(tpl,"scale",Scale);
+    Nan::SetPrototypeMethod(tpl,"antiAlias",AntiAlias);
     Nan::SetPrototypeMethod(tpl,"rotate",Rotate);
     Nan::SetPrototypeMethod(tpl,"sample",Sample);
     Nan::SetPrototypeMethod(tpl,"scale",Scale);
@@ -48,20 +50,19 @@ void Image::Init(v8::Local<v8::Object> exports) {
 
 NAN_METHOD(Image::DefineValue) {
     std::string magick,key,value;
-    if(
-        !TypeConverter::GetArgument(info[0],magick) ||
-        !TypeConverter::GetArgument(info[1],key)
-    ){
-        Nan::ThrowError("First two arguments must always be present and be a valid string");
+    Image* img;
+    Arguments args(info, "defineValue");
+    if(!args.Unwrap(img)) {
         return;
     }
-    Image* img;
-    if(!TypeConverter::Unwrap(info.This(),&img)) {
-        Nan::ThrowError("defineValue() called under invalid context");
+    if(
+        !args.Convert(0,magick) ||
+        !args.Convert(1,key)
+    ){
         return;
     }
     try {
-        if(TypeConverter::GetArgument(info[2],value)){
+        if(args.ConvertOptional(2,value)){
             img->value.defineValue(magick,key,value);
         } else {
             info.GetReturnValue().Set(Nan::New(img->value.defineValue(magick,key)).ToLocalChecked());
@@ -74,20 +75,19 @@ NAN_METHOD(Image::DefineValue) {
 NAN_METHOD(Image::DefineSet) {
     std::string magick,key;
     bool flag;
-    if(
-        !TypeConverter::GetArgument(info[0],magick) ||
-        !TypeConverter::GetArgument(info[1],key)
-    ){
-        Nan::ThrowError("First two arguments must always be present and be a valid string");
+    Image* img;
+    Arguments args(info, "defineSet");
+    if(!args.Unwrap(img)) {
         return;
     }
-    Image* img;
-    if(!TypeConverter::Unwrap(info.This(),&img)) {
-        Nan::ThrowError("defineValue() called under invalid context");
+    if(
+        !args.Convert(0,magick) ||
+        !args.Convert(1,key)
+    ){
         return;
     }
     try {
-        if(TypeConverter::GetArgument(info[2],flag)){
+        if(args.ConvertOptional(2,flag)){
             img->value.defineSet(magick,key,flag);
         } else {
             info.GetReturnValue().Set(Nan::New(img->value.defineSet(magick,key)));
@@ -105,13 +105,9 @@ NAN_METHOD(Image::New) {
 
 NAN_METHOD(Image::Read) {
     std::string file;
-    if(!TypeConverter::GetArgument(info[0],file)) {
-        Nan::ThrowError("First argument must be a string");
-        return;
-    }
-    auto* img = Unwrap<Image>(info.This());
-    if(!img) {
-        Nan::ThrowError("read() called under an invalid context");
+    Arguments args(info, "read");
+    Image* img;
+    if(!args.Unwrap(img) || !args.Convert(0,file)) {
         return;
     }
     try {
@@ -123,13 +119,12 @@ NAN_METHOD(Image::Read) {
 
 NAN_METHOD(Image::Write) {
     std::string file;
-    if(!TypeConverter::GetArgument(info[0],file)) {
-        Nan::ThrowError("First argument must be a string");
+    Image* img;
+    Arguments args(info, "write");
+    if(!args.Unwrap(img)) {
         return;
     }
-    Image* img;
-    if(!TypeConverter::Unwrap(info.This(),&img)) {
-        Nan::ThrowError("write() called under an invalid context");
+    if(!args.Convert(0,file)) {
         return;
     }
     try {
@@ -141,13 +136,12 @@ NAN_METHOD(Image::Write) {
 
 NAN_METHOD(Image::Crop) {
     Geometry* g;
-    if(!TypeConverter::Unwrap(info[0], &g)) {
-        Nan::ThrowError("First argument must be a valid instance of the Geometry class");
+    Arguments args(info, "crop");
+    Image* img;
+    if(!args.Unwrap(img)) {
         return;
     }
-    Image* img;
-    if(!TypeConverter::Unwrap(info.This(),&img)) {
-        Nan::ThrowError("crop() called under invalid context");
+    if(!args.Unwrap(0, g)) {
         return;
     }
     try {
@@ -157,33 +151,14 @@ NAN_METHOD(Image::Crop) {
     }
 }
 
-NAN_METHOD(Image::Resize) {
-    Geometry* g;
-    if(!TypeConverter::Unwrap(info[0], &g)) {
-        Nan::ThrowError("First argument must be a valid instance of the Geometry class");
-        return;
-    }
-    Image* img;
-    if(!TypeConverter::Unwrap(info.This(),&img)) {
-        Nan::ThrowError("crop() called under invalid context");
-        return;
-    }
-    try {
-        img->value.resize(g->value);
-    } catch(std::exception& e) {
-        Nan::ThrowError(e.what());
-    }
-}
-
 NAN_METHOD(Image::Shave) {
     Geometry* g;
-    if(!TypeConverter::Unwrap(info[0], &g)) {
-        Nan::ThrowError("First argument must be a valid instance of the Geometry class");
+    Arguments args(info, "shave");
+    Image* img;
+    if(!args.Unwrap(img)) {
         return;
     }
-    Image* img;
-    if(!TypeConverter::Unwrap(info.This(),&img)) {
-        Nan::ThrowError("resize() called under invalid context");
+    if(!args.Unwrap(0, g)) {
         return;
     }
     try {
@@ -195,12 +170,15 @@ NAN_METHOD(Image::Shave) {
 
 NAN_METHOD(Image::BackgroundColor) {
     Image* img;
-    if(!TypeConverter::Unwrap(info.This(),&img)) {
-        Nan::ThrowError("backgroundColor() called under invalid context");
+    Arguments args(info, "backgroundColor");
+    if(!args.Unwrap(img)) {
         return;
     }
     Color* color;
-    if(TypeConverter::Unwrap(info[0],&color)) {
+    if(!info[0]->IsUndefined()) {
+        if(!args.Unwrap(0, color)) {
+            return;
+        }
         img->value.backgroundColor(color->value);
     } else {
         v8::Local<v8::Value> argv[] = {
@@ -216,13 +194,12 @@ NAN_METHOD(Image::BackgroundColor) {
 
 NAN_METHOD(Image::Roll) {
     Geometry* g;
-    if(!TypeConverter::Unwrap(info[0], &g)) {
-        Nan::ThrowError("First argument must be a valid instance of the Geometry class");
+    Arguments args(info, "roll");
+    Image* img;
+    if(!args.Unwrap(img)) {
         return;
     }
-    Image* img;
-    if(!TypeConverter::Unwrap(info.This(),&img)) {
-        Nan::ThrowError("resize() called under invalid context");
+    if(!args.Unwrap(0, g)) {
         return;
     }
     try {
@@ -234,22 +211,18 @@ NAN_METHOD(Image::Roll) {
 
 NAN_METHOD(Image::Composite) {
     Image* img;
-    if(!TypeConverter::Unwrap(info.This(),&img)) {
-        Nan::ThrowError("composite() called under invalid context");
-        return;
-    }
+    Arguments args(info, "composite");
     Image* compositeImage;
-    if(!TypeConverter::Unwrap(info[0],&compositeImage)) {
-        Nan::ThrowError("First argument must be a valid Image instance");
-        return;
-    }
     Geometry* g;
-    if(!TypeConverter::Unwrap(info[1], &g)) {
-        Nan::ThrowError("Second argument must be a valid instance of the Geometry class");
+    Magick::CompositeOperator compositeOp;
+    if(!args.Unwrap(img) || !args.Unwrap(0,compositeImage) || !args.Unwrap(1, g)) {
         return;
     }
-    Magick::CompositeOperator compositeOp;
-    if(!TypeConverter::GetArgument(info[2], compositeOp)) {
+    if(!info[2]->IsUndefined()) {
+        if(!Constants::ConvertCompositeOperator(info[2], compositeOp)) {
+            return;
+        }
+    } else {
         compositeOp = Magick::CompositeOperator::InCompositeOp;
     }
     try {
@@ -261,13 +234,9 @@ NAN_METHOD(Image::Composite) {
 
 NAN_METHOD(Image::Scale) {
     Geometry* g;
-    if(!TypeConverter::Unwrap(info[0], &g)) {
-        Nan::ThrowError("First argument must be a valid instance of the Geometry class");
-        return;
-    }
+    Arguments args(info, "scale");
     Image* img;
-    if(!TypeConverter::Unwrap(info.This(),&img)) {
-        Nan::ThrowError("resize() called under invalid context");
+    if(!args.Unwrap(img) || !args.Unwrap(0, g)) {
         return;
     }
     try {
@@ -279,13 +248,9 @@ NAN_METHOD(Image::Scale) {
 
 NAN_METHOD(Image::Sample) {
     Geometry* g;
-    if(!TypeConverter::Unwrap(info[0], &g)) {
-        Nan::ThrowError("First argument must be a valid instance of the Geometry class");
-        return;
-    }
+    Arguments args(info, "sample");
     Image* img;
-    if(!TypeConverter::Unwrap(info.This(),&img)) {
-        Nan::ThrowError("resize() called under invalid context");
+    if(!args.Unwrap(img) || !args.Unwrap(0, g)) {
         return;
     }
     try {
@@ -299,21 +264,12 @@ NAN_METHOD(Image::MotionBlur) {
     double radius;
     double sigma;
     double angle;
-    if(!TypeConverter::GetArgument(info[0], radius)) {
-        Nan::ThrowError("First argument must be a valid double-precision integer");
-        return;
-    }
-    if(!TypeConverter::GetArgument(info[1], sigma)) {
-        Nan::ThrowError("Second argument must be a valid double-precision integer");
-        return;
-    }
-    if(!TypeConverter::GetArgument(info[2], angle)) {
-        Nan::ThrowError("Third argument must be a valid double-precision integer");
-        return;
-    }
+    Arguments args(info, "motionBlur");
     Image* img;
-    if(!TypeConverter::Unwrap(info.This(),&img)) {
-        Nan::ThrowError("resize() called under invalid context");
+    if(!args.Unwrap(img)) {
+        return;
+    }
+    if(!args.Convert(0, radius) || !args.Convert(1, sigma) || !args.Convert(2, angle)) {
         return;
     }
     try {
@@ -325,8 +281,8 @@ NAN_METHOD(Image::MotionBlur) {
 
 NAN_METHOD(Image::Normalize) {
     Image* img;
-    if(!TypeConverter::Unwrap(info.This(),&img)) {
-        Nan::ThrowError("resize() called under invalid context");
+    Arguments args(info, "normalize");
+    if(!args.Unwrap(img)) {
         return;
     }
     try {
@@ -338,13 +294,9 @@ NAN_METHOD(Image::Normalize) {
 
 NAN_METHOD(Image::Rotate) {
     double degrees;
-    if(!TypeConverter::GetArgument(info[0], degrees)) {
-        Nan::ThrowError("First argument must be a valid double-precision integer");
-        return;
-    }
     Image* img;
-    if(!TypeConverter::Unwrap(info.This(),&img)) {
-        Nan::ThrowError("resize() called under invalid context");
+    Arguments args(info, "rotate");
+    if(!args.Unwrap(img) || !args.Convert(0, degrees)) {
         return;
     }
     try {
@@ -356,13 +308,9 @@ NAN_METHOD(Image::Rotate) {
 
 NAN_METHOD(Image::Encipher) {
     std::string passphrase;
-    if(!TypeConverter::GetArgument(info[0], passphrase)) {
-        Nan::ThrowError("First argument must be a valid double-precision integer");
-        return;
-    }
+    Arguments args(info, "encipher");
     Image* img;
-    if(!TypeConverter::Unwrap(info.This(),&img)) {
-        Nan::ThrowError("resize() called under invalid context");
+    if(!args.Unwrap(img) || !args.Convert(0, passphrase)) {
         return;
     }
     try {
@@ -374,13 +322,9 @@ NAN_METHOD(Image::Encipher) {
 
 NAN_METHOD(Image::Decipher) {
     std::string passphrase;
-    if(!TypeConverter::GetArgument(info[0], passphrase)) {
-        Nan::ThrowError("First argument must be a valid double-precision integer");
-        return;
-    }
+    Arguments args(info, "decipher");
     Image* img;
-    if(!TypeConverter::Unwrap(info.This(),&img)) {
-        Nan::ThrowError("resize() called under invalid context");
+    if(!args.Unwrap(img) || !args.Convert(0, passphrase)) {
         return;
     }
     try {
@@ -392,13 +336,9 @@ NAN_METHOD(Image::Decipher) {
 
 NAN_METHOD(Image::OilPaint) {
     double radius;
-    if(!TypeConverter::GetArgument(info[0], radius)) {
-        Nan::ThrowError("First argument must be a valid double-precision integer");
-        return;
-    }
+    Arguments args(info, "oilPaint");
     Image* img;
-    if(!TypeConverter::Unwrap(info.This(),&img)) {
-        Nan::ThrowError("resize() called under invalid context");
+    if(!args.Unwrap(img) || !args.Convert(0, radius)) {
         return;
     }
     try {
@@ -411,17 +351,13 @@ NAN_METHOD(Image::OilPaint) {
 NAN_METHOD(Image::Emboss) {
     double radius;
     double sigma;
-    if(!TypeConverter::GetArgument(info[0], radius)) {
-        Nan::ThrowError("First argument must be a valid double-precision integer");
-        return;
-    }
-    if(!TypeConverter::GetArgument(info[1], sigma)) {
-        Nan::ThrowError("Second argument must be a valid double-precision integer");
-        return;
-    }
+    Arguments args(info, "emboss");
     Image* img;
-    if(!TypeConverter::Unwrap(info.This(),&img)) {
-        Nan::ThrowError("resize() called under invalid context");
+    if(
+        !args.Unwrap(img) ||
+        !args.Convert(0, radius) ||
+        !args.Convert(1, sigma)
+    ) {
         return;
     }
     try {
@@ -431,15 +367,49 @@ NAN_METHOD(Image::Emboss) {
     }
 }
 
-NAN_METHOD(Image::Negate) {
-    bool grayscale;
-    if(!TypeConverter::GetArgument(info[0], grayscale)) {
-        Nan::ThrowError("First argument must be a valid double-precision integer");
+NAN_METHOD(Image::Resize) {
+    Arguments args(info, "resize");
+    Image* img;
+    Geometry* geo;
+    if(!args.Unwrap(img)) {
         return;
     }
+    if(!args.Unwrap(0, geo)) {
+        return;
+    }
+    try {
+        img->value.resize(geo->value);
+    } catch(std::exception& e) {
+        Nan::ThrowError(e.what());
+    }
+}
+
+NAN_METHOD(Image::AntiAlias) {
+    bool flag;
+    Arguments args(info, "antiAlias");
     Image* img;
-    if(!TypeConverter::Unwrap(info.This(),&img)) {
-        Nan::ThrowError("resize() called under invalid context");
+    if(!args.Unwrap(img)) {
+        return;
+    }
+    if(!args.HasArgument(0)) {
+        info.GetReturnValue().Set(Nan::New(img->value.antiAlias()));
+        return;
+    }
+    if(!args.Convert(0, flag)) {
+        return;
+    }
+    try {
+        img->value.antiAlias(flag);
+    } catch(std::exception& e) {
+        Nan::ThrowError(e.what());
+    }
+}
+
+NAN_METHOD(Image::Negate) {
+    bool grayscale;
+    Arguments args(info, "negate");
+    Image* img;
+    if(!args.Unwrap(img) || !args.Convert(0, grayscale)) {
         return;
     }
     try {
@@ -451,18 +421,17 @@ NAN_METHOD(Image::Negate) {
 
 NAN_METHOD(Image::Compare) {
     Image* img, *ref;
-    if(!TypeConverter::Unwrap(info.This(),&img)) {
-        Nan::ThrowError("compare() called under invalid context");
-        return;
-    }
-    if(!TypeConverter::Unwrap(info[0],&ref)) {
-        Nan::ThrowError("compare() called under invalid context");
+    Arguments args(info, "compare");
+    if(!args.Unwrap(img) || !args.Unwrap(0,ref)) {
         return;
     }
     try {
         Magick::MetricType metricType;
         Local<Value> result;
-        if(TypeConverter::GetArgument(info[1], metricType)) {
+        if(!info[1]->IsUndefined()) {
+            if(!Constants::ConvertMetricType(info[1], metricType)) {
+                return;
+            }
             result = Nan::New(img->value.compare(ref->value,metricType));
         } else {
             result = Nan::New(img->value.compare(ref->value));
@@ -475,13 +444,16 @@ NAN_METHOD(Image::Compare) {
 
 NAN_METHOD(Image::Magick) {
     Image* img;
-    if(!TypeConverter::Unwrap(info.This(),&img)) {
-        Nan::ThrowError("magick() called under invalid context");
+    Arguments args(info, "magick");
+    if(!args.Unwrap(img)) {
         return;
     }
     try {
         std::string format;
-        if(TypeConverter::GetArgument(info[0],format)) {
+        if(!info[0]->IsUndefined()) {
+            if(!args.Convert(0,format)) {
+                return;
+            }
             img->value.magick(format);
         } else {
             info.GetReturnValue().Set(Nan::New(img->value.magick()).ToLocalChecked());
@@ -493,13 +465,16 @@ NAN_METHOD(Image::Magick) {
 
 NAN_METHOD(Image::Density) {
     Image* img;
-    if(!TypeConverter::Unwrap(info.This(),&img)) {
-        Nan::ThrowError("density() called under invalid context");
+    Arguments args(info, "density");
+    if(!args.Unwrap(img)) {
         return;
     }
     try {
         Geometry* density;
-        if(TypeConverter::Unwrap(info[0],&density)) {
+        if(!info[0]->IsUndefined()) {
+            if(!args.Unwrap(0, density)) {
+                return;
+            }
             img->value.density(density->value);
             return;
         }
@@ -518,13 +493,16 @@ NAN_METHOD(Image::Density) {
 
 NAN_METHOD(Image::Size) {
     Image* img;
-    if(!TypeConverter::Unwrap(info.This(),&img)) {
-        Nan::ThrowError("density() called under invalid context");
+    Arguments args(info, "size");
+    if(!args.Unwrap(img)) {
         return;
     }
     try {
         Geometry* density;
-        if(TypeConverter::Unwrap(info[0],&density)) {
+        if(!info[0]->IsUndefined()) {
+            if(!args.Unwrap(0, density)) {
+                return;
+            }
             img->value.size(density->value);
             return;
         }

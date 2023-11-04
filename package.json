@@ -50,6 +50,9 @@
         "ts-node": "^10.9.1",
         "typescript": "^5.2.2"
     },
+    "ava": {
+        "failFast": true
+    },
     "type": "commonjs",
     "description": "ImageMagick 6 bindings for Node.js",
     "name": "@native-bindings/imagemagick6",

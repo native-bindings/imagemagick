@@ -6,6 +6,7 @@
 
 class Image : public Nan::ObjectWrap {
 public:
+    static constexpr auto className = "Image";
     static Nan::Persistent<v8::Function> constructor;
     static void Init(v8::Local<v8::Object>);
 private:
@@ -17,6 +18,7 @@ private:
     static NAN_METHOD(Size);
     static NAN_METHOD(Magick);
     static NAN_METHOD(Negate);
+    static NAN_METHOD(AntiAlias);
     static NAN_METHOD(Compare);
     static NAN_METHOD(Emboss);
     static NAN_METHOD(Encipher);

@@ -6,13 +6,14 @@
 
 class Color : public Nan::ObjectWrap {
 public:
+    static constexpr auto className = "Color";
     Magick::Color value;
     static void Init(v8::Local<v8::Object>);
     static Nan::Persistent<v8::Function> constructor;
 private:
     Color();
     explicit Color(std::string&);
-    static Color* FromArguments(const Nan::FunctionCallbackInfo<v8::Value>&);
+    static Color* FromArguments(Nan::NAN_METHOD_ARGS_TYPE);
     Color(
         const Magick::Quantum& red,
         const Magick::Quantum& green,

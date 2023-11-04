@@ -6,6 +6,7 @@
 
 class Geometry : public Nan::ObjectWrap {
 public:
+    static constexpr auto className = "Geometry";
     static Nan::Persistent<v8::Function> constructor;
     static void Init(v8::Local<v8::Object>);
     Magick::Geometry value;
@@ -16,7 +17,7 @@ private:
     static NAN_METHOD(Height);
     static NAN_METHOD(Aspect);
     Geometry(size_t,size_t,ssize_t,ssize_t);
-    Geometry(std::string&);
+    explicit Geometry(std::string&);
 };
 
 

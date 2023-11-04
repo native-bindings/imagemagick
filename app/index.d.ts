@@ -1,11 +1,6 @@
 export class Geometry {
     constructor(geometry: string);
-    constructor(
-        width: number,
-        height: number,
-        x: number,
-        y: number
-    );
+    constructor(width: number, height: number, x: number, y: number);
     isValid(): boolean;
     width(): number;
     width(value: number): void;
@@ -15,104 +10,7 @@ export class Geometry {
     height(value: number): void;
 }
 
-export const constants: {
-    ChannelType: {
-        UndefinedChannel: number;
-        RedChannel: number;
-        GrayChannel: number;
-        CyanChannel: number;
-        GreenChannel: number;
-        MagentaChannel: number;
-        BlueChannel: number;
-        YellowChannel: number;
-        AlphaChannel: number;
-        OpacityChannel: number;
-        MatteChannel: number;
-        BlackChannel: number;
-        IndexChannel: number;
-        CompositeChannels: number;
-        AllChannels: number;
-        /*
-          Special purpose channel types.
-        */
-        TrueAlphaChannel: number;
-        RGBChannels: number;
-        GrayChannels: number;
-        SyncChannels: number;
-        DefaultChannels: number;
-    };
-    CompositeOperator: {
-        UndefinedCompositeOp: number;
-        NoCompositeOp: number;
-        ModulusAddCompositeOp: number;
-        AtopCompositeOp: number;
-        BlendCompositeOp: number;
-        BumpmapCompositeOp: number;
-        ChangeMaskCompositeOp: number;
-        ClearCompositeOp: number;
-        ColorBurnCompositeOp: number;
-        ColorDodgeCompositeOp: number;
-        ColorizeCompositeOp: number;
-        CopyBlackCompositeOp: number;
-        CopyBlueCompositeOp: number;
-        CopyCompositeOp: number;
-        CopyCyanCompositeOp: number;
-        CopyGreenCompositeOp: number;
-        CopyMagentaCompositeOp: number;
-        CopyOpacityCompositeOp: number;
-        CopyRedCompositeOp: number;
-        CopyYellowCompositeOp: number;
-        DarkenCompositeOp: number;
-        DstAtopCompositeOp: number;
-        DstCompositeOp: number;
-        DstInCompositeOp: number;
-        DstOutCompositeOp: number;
-        DstOverCompositeOp: number;
-        DifferenceCompositeOp: number;
-        DisplaceCompositeOp: number;
-        DissolveCompositeOp: number;
-        ExclusionCompositeOp: number;
-        HardLightCompositeOp: number;
-        HueCompositeOp: number;
-        InCompositeOp: number;
-        LightenCompositeOp: number;
-        LinearLightCompositeOp: number;
-        LuminizeCompositeOp: number;
-        MinusDstCompositeOp: number;
-        ModulateCompositeOp: number;
-        MultiplyCompositeOp: number;
-        OutCompositeOp: number;
-        OverCompositeOp: number;
-        OverlayCompositeOp: number;
-        PlusCompositeOp: number;
-        ReplaceCompositeOp: number;
-        SaturateCompositeOp: number;
-        ScreenCompositeOp: number;
-        SoftLightCompositeOp: number;
-        SrcAtopCompositeOp: number;
-        SrcCompositeOp: number;
-        SrcInCompositeOp: number;
-        SrcOutCompositeOp: number;
-        SrcOverCompositeOp: number;
-        ModulusSubtractCompositeOp: number;
-        ThresholdCompositeOp: number;
-        XorCompositeOp: number;
-    };
-    MetricType: {
-        UndefinedMetric: number;
-        AbsoluteErrorMetric: number;
-        MeanAbsoluteErrorMetric: number;
-        MeanErrorPerPixelMetric: number;
-        MeanSquaredErrorMetric: number;
-        PeakAbsoluteErrorMetric: number;
-        PeakSignalToNoiseRatioMetric: number;
-        RootMeanSquaredErrorMetric: number;
-        NormalizedCrossCorrelationErrorMetric: number;
-        FuzzErrorMetric: number;
-        UndefinedErrorMetric: number;
-        PerceptualHashErrorMetric: number;
-    };
-};
+export const constants: import("./constants").IConstants;
 
 export class Color {
     constructor(value: string);
@@ -135,7 +33,7 @@ export class Image {
     normalize(): void;
     backgroundColor(): Color;
     backgroundColor(value: Color): void;
-    motionBlur(radius: number, sigma: number,angle:number): void;
+    motionBlur(radius: number, sigma: number, angle: number): void;
     sample(value: Geometry): void;
     scale(value: Geometry): void;
     roll(value: Geometry): void;
@@ -149,12 +47,15 @@ export class Image {
     density(value: Geometry): void;
     size(): Geometry;
     size(value: Geometry): void;
+    resize(value: Geometry): void;
+    antiAlias(): boolean;
+    antiAlias(value: boolean): void;
     magick(): string;
     magick(value: string): void;
-    defineValue(magick:string,key: string): string;
-    defineValue(magick:string,key: string, value: string): void;
-    defineSet(magick:string,key: string): boolean;
-    defineSet(magick:string,key: string, flag: boolean): void;
+    defineValue(magick: string, key: string): string;
+    defineValue(magick: string, key: string, value: string): void;
+    defineSet(magick: string, key: string): boolean;
+    defineSet(magick: string, key: string, flag: boolean): void;
     composite(
         compositeImage: Image,
         offset: Geometry,
