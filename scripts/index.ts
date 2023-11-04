@@ -159,9 +159,13 @@ async function generateBindingConstants() {
     cs.write(
         "void Constants::Init(const v8::Local<v8::Object> exports) {\n",
         () => {
+            cs.write("auto constants = Nan::New<v8::Object>();\n");
             for (const def of bindingConstants) {
-                cs.write(`Set${def.name}BindingConstants(exports);\n`);
+                cs.write(`Set${def.name}BindingConstants(constants);\n`);
             }
+            cs.write(
+                'Nan::Set(exports, Nan::New("constants").ToLocalChecked(), constants);\n'
+            );
         },
         "}\n"
     );
