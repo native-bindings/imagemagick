@@ -22,9 +22,10 @@
         "CMakeLists.txt",
         "deps",
         "scripts/**/*.{js,map,ts,d.ts}",
-        "pkgconfig/**/*.{js,map,ts,d.ts}",
+        "core/**/*.{js,map,ts,d.ts}",
+        "core/**/*.{cpp,h,c,txt}",
         "app/**/*.{js,map,ts,d.ts}",
-        "src/**/*.{cpp,h}"
+        "src/**/*.{cpp,h,txt}"
     ],
     "repository": {
         "type": "git",
