@@ -6,6 +6,7 @@
         "parseArgumentsLine.ts",
         "Compiler.ts",
         "Parser.ts",
+        "camelCase.ts",
         "index.ts",
         "Preprocessor.ts",
         "Tokenizer.ts",

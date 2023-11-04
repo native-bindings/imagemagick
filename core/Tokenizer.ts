@@ -61,7 +61,7 @@ export default class Tokenizer {
                 this.#expect("*/");
             } else if (Character.isIdentifierStart(ch)) {
                 this.#readIdentifier();
-            } else if (this.#isLiteralNumber()) {
+            } else if (this.#isLiteralNumberStart()) {
                 this.#readLiteralNumber();
             } else {
                 assert.strict.ok(
@@ -79,11 +79,23 @@ export default class Tokenizer {
         }
         return this.#tokens;
     }
-    #isLiteralNumber() {
-        let ch = this.#current();
+    #isLiteralNumberStart() {
+        let ch: number;
+        /**
+         * if current character is a plus sign, negative sign or a dot, set `ch` to the next character,
+         * so it can be checked by the end of the method if it's whether an integer part or not (0-9).
+         */
         if (this.#peek(".") || this.#peek("+") || this.#peek("-")) {
             ch = this.#charCode(1);
+        } else {
+            /**
+             * in case there's no sign or dot, then do the last check by checking if the current `ch` is an integer part.
+             */
+            ch = this.#current();
         }
+        /**
+         * here we check the character after the sign or dot is a sign, or if the current character is a sign
+         */
         return Character.isIntegerPart(ch);
     }
     #readAsLongAs(validate: (ch: number) => boolean) {
