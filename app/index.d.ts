@@ -72,3 +72,13 @@ export class Image {
 export type CompositeOperator = number;
 
 export type MetricType = number;
+
+export class CoderInfo {
+    constructor();
+    name(): string;
+    description(): string;
+    mimeType(): string;
+    isReadable(): boolean;
+    isWritable(): boolean;
+    isMultiFrame(): boolean;
+}

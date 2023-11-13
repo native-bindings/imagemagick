@@ -1,5 +1,5 @@
-#ifndef NODE_IMAGEMAGICK_CONSTANTS_H_
-#define NODE_IMAGEMAGICK_CONSTANTS_H_
+#ifndef NATIVE_BINDINGS_IMAGEMAGICK_H_
+#define NATIVE_BINDINGS_IMAGEMAGICK_H_
 
 #include <Magick++.h>
 #include <nan.h>
@@ -85,4 +85,4 @@ public:
     static void Init(v8::Local<v8::Object> exports);
 };
 
-#endif // NODE_IMAGEMAGICK_CONSTANTS_H_
+#endif // NATIVE_BINDINGS_IMAGEMAGICK_H_

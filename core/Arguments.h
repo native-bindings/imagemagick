@@ -69,7 +69,7 @@ public:
     template<typename T> [[nodiscard]] bool Unwrap(T*& out) const {
         return Unwrap(info.This(), out);
     }
-    template<typename T> [[nodiscard]] bool Unwrap(v8::Local<v8::Value> value, T*& out, std::string label = "instance") const {
+    template<typename T> [[nodiscard]] static bool Unwrap(v8::Local<v8::Value> value, T*& out, std::string&& label = "instance") {
         if(!value->IsObject()){
             ThrowError("Expected " + label + " to be of type " + std::string(T::className) + ".");
             return false;

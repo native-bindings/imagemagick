@@ -174,8 +174,8 @@ async function generateBindingConstants() {
         cs.value()
     );
 
-    cs.write("#ifndef NODE_IMAGEMAGICK_CONSTANTS_H_\n");
-    cs.write("#define NODE_IMAGEMAGICK_CONSTANTS_H_\n\n");
+    cs.write("#ifndef NATIVE_BINDINGS_IMAGEMAGICK_H_\n");
+    cs.write("#define NATIVE_BINDINGS_IMAGEMAGICK_H_\n\n");
     cs.write("#include <Magick++.h>\n");
     cs.write("#include <nan.h>\n\n");
     cs.write("class Constants {\n");
@@ -186,7 +186,7 @@ async function generateBindingConstants() {
         }
     });
     cs.write("};\n\n");
-    cs.write("#endif // NODE_IMAGEMAGICK_CONSTANTS_H_\n");
+    cs.write("#endif // NATIVE_BINDINGS_IMAGEMAGICK_H_\n");
     await fs.promises.writeFile(
         path.resolve(__dirname, "../src/Constants.h"),
         cs.value()

@@ -1,5 +1,5 @@
 add_library(
-    node_imagemagick SHARED
+    NativeBindingsImageMagick SHARED
     main.cpp
     Image.cpp
     Image.h
@@ -9,15 +9,17 @@ add_library(
     Color.h
     Constants.cpp
     Constants.h
+    CoderInfo.cpp
+    CoderInfo.h
 )
-target_link_libraries(node_imagemagick PRIVATE NodeNativeBindingsCore Magick++)
+target_link_libraries(NativeBindingsImageMagick PRIVATE NodeNativeBindingsCore Magick++)
 target_compile_options(
-    node_imagemagick PRIVATE
+    NativeBindingsImageMagick PRIVATE
     -Wfatal-errors
     #-pedantic -Wall -Werror -Wextra -Wfatal-errors
     # -Wno-error=unused-parameter
 )
 
 if(DEFINED CMAKE_JS_VERSION)
-    set_target_properties(node_imagemagick PROPERTIES PREFIX "" SUFFIX ".node")
+    set_target_properties(NativeBindingsImageMagick PROPERTIES PREFIX "" SUFFIX ".node")
 endif()
