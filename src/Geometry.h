@@ -16,6 +16,14 @@ private:
     static NAN_METHOD(IsValid);
     static NAN_METHOD(Height);
     static NAN_METHOD(Aspect);
+    static NAN_METHOD(LimitPixels);
+    static NAN_METHOD(Percentage);
+    static NAN_METHOD(FillArea);
+    static NAN_METHOD(Greater);
+    static NAN_METHOD(Less);
+    static NAN_METHOD(XNegative);
+    static NAN_METHOD(YNegative);
+    static NAN_METHOD(ToString);
     Geometry(size_t,size_t,ssize_t,ssize_t);
     explicit Geometry(std::string&);
 };

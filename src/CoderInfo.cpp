@@ -11,6 +11,9 @@ void CoderInfo::Init(v8::Local<v8::Object> exports) {
     Nan::SetPrototypeMethod(tpl, "name", Name);
     Nan::SetPrototypeMethod(tpl, "mimeType", MimeType);
     Nan::SetPrototypeMethod(tpl, "description", Description);
+    Nan::SetPrototypeMethod(tpl, "isMultiFrame", IsMultiFrame);
+    Nan::SetPrototypeMethod(tpl, "isReadable", IsReadable);
+    Nan::SetPrototypeMethod(tpl, "isWritable", IsWritable);
 
     constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
 
@@ -35,7 +38,7 @@ NAN_METHOD(CoderInfo::CoderInfoList) {
         Nan::ThrowError(e.what());
         return;
     }
-    auto result = Nan::New<v8::Array>(list.size());
+    auto result = Nan::New<v8::Array>();
     auto i = 0;
     CoderInfo* instance = nullptr;
     for(const Magick::CoderInfo& coderInfo : list) {
@@ -45,6 +48,7 @@ NAN_METHOD(CoderInfo::CoderInfoList) {
         }
         instance->value = coderInfo;
         Nan::Set(result, Nan::New(i), jsInstance);
+        i++;
     }
     info.GetReturnValue().Set(result);
 }

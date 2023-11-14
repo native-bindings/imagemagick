@@ -17,10 +17,7 @@ public:
      * @return whether the conversion was successful
      */
     template<typename T> [[nodiscard]] bool ConvertOptional(int index, T& out) const {
-        if(!AssertArgumentIndex(index)) {
-            return false;
-        }
-        if(info[index]->IsUndefined()) {
+        if(!HasArgument(index) || info[index]->IsUndefined()) {
             return false;
         }
         return Convert(index, out);

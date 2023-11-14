@@ -4,10 +4,25 @@ export class Geometry {
     isValid(): boolean;
     width(): number;
     width(value: number): void;
-    aspect(): number;
-    aspect(value: number): void;
     height(): number;
     height(value: number): void;
+    aspect(): boolean;
+    aspect(value: boolean): void;
+    limitPixels(): boolean;
+    limitPixels(value: boolean): void;
+    percentage(): boolean;
+    percentage(value: boolean): void;
+    fillArea(): boolean;
+    fillArea(value: boolean): void;
+    greater(): boolean;
+    greater(value: boolean): void;
+    less(): boolean;
+    less(value: boolean): void;
+    xNegative(): boolean;
+    xNegative(value: boolean): void;
+    yNegative(): boolean;
+    yNegative(value: boolean): void;
+    toString(): string;
 }
 
 export const constants: import("./constants").IConstants;
@@ -82,3 +97,5 @@ export class CoderInfo {
     isWritable(): boolean;
     isMultiFrame(): boolean;
 }
+
+export function coderInfoList(): CoderInfo[];

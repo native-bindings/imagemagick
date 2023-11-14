@@ -29,6 +29,14 @@ void Geometry::Init(v8::Local<v8::Object> exports) {
     Nan::SetPrototypeMethod(tpl,"isValid",IsValid);
     Nan::SetPrototypeMethod(tpl,"aspect",Aspect);
     Nan::SetPrototypeMethod(tpl,"height",Height);
+    Nan::SetPrototypeMethod(tpl,"limitPixels",LimitPixels);
+    Nan::SetPrototypeMethod(tpl,"percentage",Percentage);
+    Nan::SetPrototypeMethod(tpl,"fillArea",FillArea);
+    Nan::SetPrototypeMethod(tpl,"greater",Greater);
+    Nan::SetPrototypeMethod(tpl,"less",Less);
+    Nan::SetPrototypeMethod(tpl,"xNegative",XNegative);
+    Nan::SetPrototypeMethod(tpl,"yNegative",YNegative);
+    Nan::SetPrototypeMethod(tpl,"toString",ToString);
 
     constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
 
@@ -42,14 +50,118 @@ NAN_METHOD(Geometry::Width) {
         return;
     }
     uint32_t value;
-    if(!info[0]->IsUndefined()) {
-        if(!args.Convert(0, value)) {
-            return;
-        }
+    if(args.ConvertOptional(0, value)) {
         g->value.width(value);
+    } else {
+        info.GetReturnValue().Set(Nan::New<v8::Number>(g->value.width()));
+    }
+}
+
+NAN_METHOD(Geometry::LimitPixels) {
+    Geometry* g;
+    Arguments args(info, "limitPixels");
+    if(!args.Unwrap(g)) {
         return;
     }
-    info.GetReturnValue().Set(Nan::New<v8::Number>(g->value.width()));
+    bool newValue;
+    if(args.ConvertOptional(0, newValue)){
+        g->value.limitPixels(newValue);
+    } else {
+        info.GetReturnValue().Set(Nan::New(g->value.limitPixels()));
+    }
+}
+
+NAN_METHOD(Geometry::Percentage) {
+    Geometry* g;
+    Arguments args(info, "percentage");
+    if(!args.Unwrap(g)) {
+        return;
+    }
+    bool newValue;
+    if(args.ConvertOptional(0, newValue)){
+        g->value.limitPixels(newValue);
+    } else {
+        info.GetReturnValue().Set(Nan::New(g->value.limitPixels()));
+    }
+}
+
+NAN_METHOD(Geometry::FillArea) {
+    Geometry* g;
+    Arguments args(info, "fillArea");
+    if(!args.Unwrap(g)) {
+        return;
+    }
+    bool newValue;
+    if(args.ConvertOptional(0, newValue)){
+        g->value.fillArea(newValue);
+    } else {
+        info.GetReturnValue().Set(Nan::New(g->value.fillArea()));
+    }
+}
+
+NAN_METHOD(Geometry::Greater) {
+    Geometry* g;
+    Arguments args(info, "greater");
+    if(!args.Unwrap(g)) {
+        return;
+    }
+    bool newValue;
+    if(args.ConvertOptional(0, newValue)){
+        g->value.greater(newValue);
+    } else {
+        info.GetReturnValue().Set(Nan::New(g->value.greater()));
+    }
+}
+
+NAN_METHOD(Geometry::Less) {
+    Geometry* g;
+    Arguments args(info, "less");
+    if(!args.Unwrap(g)) {
+        return;
+    }
+    bool newValue;
+    if(args.ConvertOptional(0, newValue)){
+        g->value.less(newValue);
+    } else {
+        info.GetReturnValue().Set(Nan::New(g->value.less()));
+    }
+}
+
+NAN_METHOD(Geometry::XNegative) {
+    Geometry* g;
+    Arguments args(info, "xNegative");
+    if(!args.Unwrap(g)) {
+        return;
+    }
+    bool newValue;
+    if(args.ConvertOptional(0, newValue)){
+        g->value.xNegative(newValue);
+    } else {
+        info.GetReturnValue().Set(Nan::New(g->value.xNegative()));
+    }
+}
+
+NAN_METHOD(Geometry::YNegative) {
+    Geometry* g;
+    Arguments args(info, "yNegative");
+    if(!args.Unwrap(g)) {
+        return;
+    }
+    bool newValue;
+    if(args.ConvertOptional(0, newValue)){
+        g->value.yNegative(newValue);
+    } else {
+        info.GetReturnValue().Set(Nan::New(g->value.yNegative()));
+    }
+}
+
+NAN_METHOD(Geometry::ToString) {
+    Geometry* g;
+    Arguments args(info, "toString");
+    if(!args.Unwrap(g)) {
+        return;
+    }
+    info.GetReturnValue().Set(Nan::New(g->value.operator std::string()).ToLocalChecked());
 }
 
 NAN_METHOD(Geometry::IsValid) {
@@ -68,14 +180,11 @@ NAN_METHOD(Geometry::Height) {
         return;
     }
     uint32_t value;
-    if(!info[0]->IsUndefined()) {
-        if(!args.Convert(0, value)) {
-            return;
-        }
+    if(args.ConvertOptional(0, value)) {
         g->value.height(value);
-        return;
+    } else {
+        info.GetReturnValue().Set(Nan::New<v8::Number>(g->value.height()));
     }
-    info.GetReturnValue().Set(Nan::New<v8::Number>(g->value.height()));
 }
 
 NAN_METHOD(Geometry::New) {

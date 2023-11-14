@@ -175,8 +175,10 @@ test("Image#read: that it throws an error when an invalid file is passed", (t) =
         () => {
             new Magick.Image().read("!");
         },
-        undefined,
-        "unable to open image"
+        {
+            message:
+                "node: unable to open image `!': No such file or directory @ error/blob.c/OpenBlob/2964",
+        }
     );
 });
 
@@ -206,8 +208,7 @@ test("Geometry#width: it should throw an error if an invalid type is passed", (t
                 ""
             );
         },
-        undefined,
-        "Expected argument number 1 to be of type Uint32."
+        { message: "Expected argument number 1 to be of type Uint32." }
     );
 });
 
@@ -223,6 +224,13 @@ test("Geometry#height: it should throw an error if an invalid type is passed", (
         },
         { message: "Expected argument number 1 to be of type Uint32." }
     );
+});
+
+test("Magick#coderInfoList: it should list available codecs", (t) => {
+    t.assert(Magick.coderInfoList().length > 0);
+    t.assert(Magick.coderInfoList().some((c) => c.name() === "PNG"));
+    t.assert(Magick.coderInfoList().some((c) => c.name() === "JPEG"));
+    t.assert(Magick.coderInfoList().some((c) => c.name() === "JPG"));
 });
 
 test("Image#read: it should throw an error if an invalid type is passed", (t) => {
@@ -249,6 +257,15 @@ test("Image#size: it should throw an error if an invalid type is passed", (t) =>
         },
         { message: "Expected argument number 1 to be of type Geometry." }
     );
+});
+
+test("Geometry#toString: it should return stringified geometry", (t) => {
+    t.deepEqual(new Magick.Geometry("100x100").toString(), "100x100");
+    t.deepEqual(new Magick.Geometry("200x100").toString(), "200x100");
+    const g1 = new Magick.Geometry("100x100");
+    g1.width(200);
+    g1.height(200);
+    t.deepEqual(g1.toString(), "200x200");
 });
 
 test("Image#resize: it should throw an error if an invalid type is passed", (t) => {
