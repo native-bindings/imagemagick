@@ -8,7 +8,7 @@
         "textstreamjs": "^0.0.4"
     },
     "engines": {
-        "node": "^20"
+        "node": "^24"
     },
     "scripts": {
         "test": "npx tsc -b test --force && npx ava test/test.js",
@@ -58,7 +58,7 @@
         "url": "https://github.com/VictorQueiroz"
     },
     "devDependencies": {
-        "@types/node": "^20.19.27",
+        "@types/node": "^24.10.4",
         "ava": "^6.4.1",
         "c8": "^10.1.3",
         "eslint": "^8.57.1",
