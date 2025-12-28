@@ -5,7 +5,7 @@
 /.vscode
 /.history
 /libs
-*.js
-*.map
-*.d.ts
+/scripts/*.js
+/scripts/*.d.ts
+/scripts/*.map
 tsconfig.tsbuildinfo
