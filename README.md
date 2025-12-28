@@ -8,8 +8,8 @@ npm i @native-bindings/imagemagick6
 
 ### Requirements
 
--   C++14
--   CMake >= 3.7
+- C++20
+- CMake >=3.10
 
 ### Usage
 

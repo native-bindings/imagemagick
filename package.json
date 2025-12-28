@@ -13,7 +13,7 @@
     "scripts": {
         "test": "npx tsc -b test --force && npx ava test/test.js",
         "prepublishOnly": "npx tsc -b scripts --force && npm run cli -- --configure && npm run test && NODE_ENV=development npm run test",
-        "cli": "npx tsx scripts",
+        "cli": "node scripts",
         "postinstall": "npm run cli -- --configure"
     },
     "main": "./app/index.js",
