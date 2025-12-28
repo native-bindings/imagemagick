@@ -9,6 +9,5 @@ tsconfig.tsbuildinfo
 *.js
 *.d.ts
 *.map
-# Do not ignore `.js` and `.d.ts` from the `app` folder
 !/app/**/*.js
 !/app/**/*.d.ts
